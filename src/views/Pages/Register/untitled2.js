@@ -1,9 +1,12 @@
 import React, { Component} from 'react';
-import { HashRouter, Route, Switch, Redirect } from 'react-router-dom';
+import { HashRouter, Route, Switch } from 'react-router-dom';
 // import { renderRoutes } from 'react-router-config';
 import './App.scss';
+import "./App.css";
 
 import AuthService from "./services/auth.service";
+
+
 
 
 const loading = () => <div className="animated fadeIn pt-3 text-center">Loading...</div>;
@@ -45,11 +48,6 @@ const user = AuthService.getCurrentUser();
       });
     }
   return true;
-
-  if (user === null) {
-      return <Redirect to='/login'/>;
-    }
-  return false;
 
 }
 

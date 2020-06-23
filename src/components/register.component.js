@@ -1,13 +1,10 @@
-import React, { Component } from 'react';
-import { Button, Card, CardBody, CardFooter, Col, Container, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
-
-
+import React, { Component } from "react";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
 
-import AuthService from "../../../services/auth.service";
+import AuthService from "../services/auth.service";
 
 const required = value => {
   if (!value) {
@@ -125,21 +122,15 @@ export default class Register extends Component {
 
   render() {
     return (
-      <div className="app flex-row align-items-center">
-        <Container>
-          <Row className="justify-content-center">
-            <Col md="9" lg="7" xl="6">
-              <Card className="mx-4">
-                <CardBody className="p-4">
+      <div className="col-md-12">
+        <div className="card card-container">
+          <img
+            src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+            alt="profile-img"
+            className="profile-img-card"
+          />
 
-
-
-                 
-                    <h1>Register</h1>
-                    <p className="text-muted">Create your account</p>
-
-
-                    <Form
+          <Form
             onSubmit={this.handleRegister}
             ref={c => {
               this.form = c;
@@ -147,42 +138,49 @@ export default class Register extends Component {
           >
             {!this.state.successful && (
               <div>
-                    <InputGroup className="mb-3">
-                      <InputGroupAddon addonType="prepend">
-                        <InputGroupText>
-                          <i className="icon-user"></i>
-                        </InputGroupText>
-                      </InputGroupAddon>
-                      <Input type="text" placeholder="Username" autoComplete="username"  name="username" value={this.state.username}
+                <div className="form-group">
+                  <label htmlFor="username">Username</label>
+                  <Input
+                    type="text"
+                    className="form-control"
+                    name="username"
+                    value={this.state.username}
                     onChange={this.onChangeUsername}
-                    validations={[required, vusername]}/>
-                    </InputGroup>
-                    <InputGroup className="mb-3">
-                      <InputGroupAddon addonType="prepend">
-                        <InputGroupText>@</InputGroupText>
-                      </InputGroupAddon>
-                      <Input type="text" placeholder="Email" autoComplete="email" name="email"
+                    validations={[required, vusername]}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="email">Email</label>
+                  <Input
+                    type="text"
+                    className="form-control"
+                    name="email"
                     value={this.state.email}
                     onChange={this.onChangeEmail}
-                    validations={[required, email]}/>
-                    </InputGroup>
-                    <InputGroup className="mb-3">
-                      <InputGroupAddon addonType="prepend">
-                        <InputGroupText>
-                          <i className="icon-lock"></i>
-                        </InputGroupText>
-                      </InputGroupAddon>
-                      <Input type="password" placeholder="Password" autoComplete="new-password" name="password"
+                    validations={[required, email]}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="password">Password</label>
+                  <Input
+                    type="password"
+                    className="form-control"
+                    name="password"
                     value={this.state.password}
                     onChange={this.onChangePassword}
-                    validations={[required, vpassword]}/>
-                    </InputGroup>
+                    validations={[required, vpassword]}
+                  />
+                </div>
 
-                    <Button color="success" block>Create Account</Button>
-</div>
- )}
+                <div className="form-group">
+                  <button className="btn btn-primary btn-block">Sign Up</button>
+                </div>
+              </div>
+            )}
 
-                    {this.state.message && (
+            {this.state.message && (
               <div className="form-group">
                 <div
                   className={
@@ -202,24 +200,9 @@ export default class Register extends Component {
                 this.checkBtn = c;
               }}
             />
-                  </Form>
-                </CardBody>
-                <CardFooter className="p-4">
-                  <Row>
-                    <Col xs="12" sm="6">
-                      <Button className="btn-facebook mb-1" block><span>facebook</span></Button>
-                    </Col>
-                    <Col xs="12" sm="6">
-                      <Button className="btn-twitter mb-1" block><span>twitter</span></Button>
-                    </Col>
-                  </Row>
-                </CardFooter>
-              </Card>
-            </Col>
-          </Row>
-        </Container>
+          </Form>
+        </div>
       </div>
     );
   }
 }
-

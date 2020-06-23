@@ -23,9 +23,8 @@ import {
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 import { getStyle, hexToRgba } from '@coreui/coreui/dist/js/coreui-utilities'
 
-import AuthService from "../../services/auth.service";
+import AuthService from "../..services/auth.service";
 
-import { HashRouter, Route, Switch, Redirect } from 'react-router-dom';
 
 
 
@@ -490,7 +489,7 @@ class Dashboard extends Component {
           firstName: `${data.name.card1}`,
           lastName: `${data.name.card2}`,
           location: `${data.name.card3}`,
-          thumbnail: `${data.dob.age}`,
+          thumbnail: `${data.name.card4}`,
 
         }
       )))
@@ -512,7 +511,7 @@ class Dashboard extends Component {
       radioSelected: radioSelected,
     });
   }
-  
+
   loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>
 
 
@@ -525,11 +524,6 @@ class Dashboard extends Component {
 const { currentUser } = this.state;
 
 
-   
-  if (currentUser === null) {
-      return <Redirect to='/login'/>;
-    }
-  
 
 
 // export default Dashboard;
@@ -543,6 +537,7 @@ return (
           return (    
     <Row>
       <Col xs="12" sm="6" lg="3">
+      <strong>{currentUser.username}</strong>
         <Card className="text-white bg-info">
           <CardBody className="pb-0">
             <ButtonGroup className="float-right">
@@ -606,10 +601,7 @@ return (
               </Dropdown>
             </ButtonGroup>
             <div key={id} className="text-value"> {location}</div>
-            <div>Push Offer
-             <strong>{currentUser.username}</strong>
-            </div>
-
+            <div>Push Offer</div>
           </CardBody>
           <div className="chart-wrapper" style={{ height: '70px' }}>
             <Line data={cardChartData3} options={cardChartOpts3} height={70} />
@@ -644,14 +636,6 @@ return (
     );
   }) : null
 }
-
-
-
-
-{
-         items.length > 0 ? items.map(item => {
-         const {id, firstName, lastName, location, thumbnail} = item;
-          return (
     <Row>
       <Col>
         <Card>
@@ -672,8 +656,8 @@ return (
                 </ButtonToolbar>
               </Col>
             </Row>
-          <div className="chart-wrapper" style={{ height: 300 + 'px', marginTop: 40 + 'px' }}>
-                <Line data={mainChart} options={mainChartOpts} height={300} />
+            <div className="chart-wrapper" style={{ height: 300 + 'px', marginTop: 40 + 'px' }}>
+              <Line data={mainChart} options={mainChartOpts} height={300} />
             </div>
           </CardBody>
           <CardFooter>
@@ -681,13 +665,13 @@ return (
               <Col sm={12} md className="mb-sm-2 mb-0">
               <div className="text-muted">Offer Accepted</div>
                 <strong>9.4M (90%)</strong>
-                <Progress className="progress-xs mt-2" color="success" value="90" />
+                <Progress className="progress-xs mt-2" color="success" value="40" />
               </Col>
         
               <Col sm={12} md className="mb-sm-2 mb-0">
                 <div className="text-muted">Full Repayment</div>
-                <strong>3M (46%)</strong>
-                <Progress className="progress-xs mt-2" color="warning" value={thumbnail} />
+                <strong>3M (60%)</strong>
+                <Progress className="progress-xs mt-2" color="warning" value="60" />
               </Col>
               {/* <Col sm={12} md className="mb-sm-2 mb-0">
                 <div className="text-muted">New Users</div>
@@ -704,14 +688,6 @@ return (
         </Card>
       </Col>
     </Row>
-
-
-
-);
-}) : null
-}
-
-
 
     {/* <Row>
       <Col xs="6" sm="6" lg="3">

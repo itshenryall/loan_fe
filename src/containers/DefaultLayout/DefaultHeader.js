@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { Badge, UncontrolledDropdown, DropdownItem, DropdownMenu, DropdownToggle, Nav, NavItem } from 'reactstrap';
 import PropTypes from 'prop-types';
-
 import { AppAsideToggler, AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
 import logo from '../../assets/img/brand/logo.svg'
 import sygnet from '../../assets/img/brand/sygnet.svg'
-
+import AuthService from "../../services/auth.service";
 const propTypes = {
   children: PropTypes.node,
 };
@@ -16,6 +15,12 @@ const propTypes = {
 const defaultProps = {};
 
 class DefaultHeader extends Component {
+
+
+  logOut() {
+    AuthService.logout();
+  }
+
   render() {
 
     // eslint-disable-next-line
@@ -40,6 +45,7 @@ class DefaultHeader extends Component {
           <NavItem className="px-3">
             <NavLink to="#" className="nav-link">Settings</NavLink>
           </NavItem>
+         
         </Nav>
         <Nav className="ml-auto" navbar>
           {/* <NavItem className="d-md-down-none">
@@ -68,7 +74,15 @@ class DefaultHeader extends Component {
               <DropdownItem><i className="fa fa-file"></i> Projects<Badge color="primary">42</Badge></DropdownItem>
               <DropdownItem divider />
               <DropdownItem><i className="fa fa-shield"></i> Lock Account</DropdownItem>
-              <DropdownItem onClick={e => this.props.onLogout(e)}><i className="fa fa-lock"></i> Logout</DropdownItem>
+              <DropdownItem><a href=""  className="nav-link" onClick={this.logOut}><i className="fa fa-lock"></i>   
+                    LogOut
+                  </a></DropdownItem>
+
+
+            
+         
+     
+
             </DropdownMenu>
           </UncontrolledDropdown>
         </Nav>
