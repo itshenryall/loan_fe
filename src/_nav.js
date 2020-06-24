@@ -16,7 +16,7 @@ export default {
     },
     {
       name: 'Rules',
-      url: '',
+      url: '#',
       icon: 'icon-drop',
     },
     {
@@ -29,13 +29,13 @@ export default {
     },
     {
       name: 'Notifs Received',
-      url: '',
+      url: '#',
       icon: 'icon-puzzle',
       
     },
     {
       name: 'Sent to Scoring System',
-      url: '',
+      url: '#',
       icon: 'icon-pie-chart',
     },
     {
@@ -53,13 +53,13 @@ export default {
     },
     {
       name: 'Forward Fulfillment to Operator',
-      url: '',
+      url: '#',
       icon: 'icon-puzzle',
       
     },
     {
       name: 'Froward Result to Customer',
-      url: '',
+      url: '#',
       icon: 'icon-pie-chart',
     },
     {
@@ -72,7 +72,7 @@ export default {
     },
     {
       name: 'Topup Notifs Received',
-      url: '',
+      url: '#',
       icon: 'icon-puzzle',
       
     },
@@ -86,13 +86,13 @@ export default {
     },
     {
       name: 'Full Repayment',
-      url: '',
+      url: '#',
       icon: 'icon-puzzle',
       
     },
     {
       name: 'Partial Repayment',
-      url: '',
+      url: '#',
       icon: 'icon-pie-chart',
     },
     {
@@ -113,18 +113,18 @@ export default {
     },
     {
       name: 'FrontEnd',
-      url: '',
+      url: '#',
       icon: 'icon-puzzle',
       
     },
     {
       name: 'FTP Server',
-      url: '',
+      url: '#',
       icon: 'icon-pie-chart',
     },
     {
       name: 'Load Balancer',
-      url: '',
+      url: '#',
       icon: 'icon-pie-chart',
     },
     {
@@ -137,13 +137,13 @@ export default {
     },
     {
       name: 'Database',
-      url: '',
+      url: '#',
       icon: 'icon-puzzle',
       
     },
     {
       name: 'Queue System',
-      url: '',
+      url: '#',
       icon: 'icon-pie-chart',
     },
     {
@@ -156,13 +156,13 @@ export default {
     },
     {
       name: 'Message Broker',
-      url: '',
+      url: '#',
       icon: 'icon-puzzle',
       
     },
     {
       name: 'Operator',
-      url: '',
+      url: '#',
       icon: 'icon-pie-chart',
     },
   ]

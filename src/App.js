@@ -4,7 +4,7 @@ import { HashRouter, Route, Switch, Redirect } from 'react-router-dom';
 import './App.scss';
 
 import AuthService from "./services/auth.service";
-
+import BoardModerator from "./components/board-moderator.component";
 
 const loading = () => <div className="animated fadeIn pt-3 text-center">Loading...</div>;
 
@@ -16,8 +16,6 @@ const Login = React.lazy(() => import('./views/Pages/Login'));
 const Register = React.lazy(() => import('./views/Pages/Register'));
 const Page404 = React.lazy(() => import('./views/Pages/Page404'));
 const Page500 = React.lazy(() => import('./views/Pages/Page500'));
-
-
 
 
 
@@ -69,6 +67,7 @@ const user = AuthService.getCurrentUser();
               <Route exact path="/register" name="Register Page" component={Register} />
               <Route exact path="/404" name="Page 404" component={Page404} />
               <Route exact path="/500" name="Page 500" component={Page500} />
+              <Route path="/mod" component={BoardModerator} />
               <Route path="/" name="Home" component={DefaultLayout} />
             </Switch>
           </React.Suspense>

@@ -39,11 +39,15 @@ class DefaultHeader extends Component {
           <NavItem className="px-3">
             <NavLink to="/dashboard" className="nav-link" >Dashboard</NavLink>
           </NavItem>
-          <NavItem className="px-3">
+          {/*<NavItem className="px-3">
             <Link to="/users" className="nav-link">Users</Link>
-          </NavItem>
+    </NavItem>*/}
           <NavItem className="px-3">
             <NavLink to="#" className="nav-link">Settings</NavLink>
+          </NavItem>
+
+          <NavItem className="px-3">
+            <NavLink to="/mod" className="nav-link">Moderator</NavLink>
           </NavItem>
          
         </Nav>
@@ -62,7 +66,7 @@ class DefaultHeader extends Component {
               <img src={'../../assets/img/favicon.png'} className="img-avatar" alt="admin@bootstrapmaster.com" />
             </DropdownToggle>
             <DropdownMenu right>
-              <DropdownItem header tag="div" className="text-center"><strong>Account</strong></DropdownItem>
+              {/*<DropdownItem header tag="div" className="text-center"><strong>Account</strong></DropdownItem>
               <DropdownItem><i className="fa fa-bell-o"></i> Updates<Badge color="info">42</Badge></DropdownItem>
               <DropdownItem><i className="fa fa-envelope-o"></i> Messages<Badge color="success">42</Badge></DropdownItem>
               <DropdownItem><i className="fa fa-tasks"></i> Tasks<Badge color="danger">42</Badge></DropdownItem>
@@ -73,7 +77,7 @@ class DefaultHeader extends Component {
               <DropdownItem><i className="fa fa-usd"></i> Payments<Badge color="secondary">42</Badge></DropdownItem>
               <DropdownItem><i className="fa fa-file"></i> Projects<Badge color="primary">42</Badge></DropdownItem>
               <DropdownItem divider />
-              <DropdownItem><i className="fa fa-shield"></i> Lock Account</DropdownItem>
+        <DropdownItem><i className="fa fa-shield"></i> Lock Account</DropdownItem>*/}
               <DropdownItem><a href=""  className="nav-link" onClick={this.logOut}><i className="fa fa-lock"></i>   
                     LogOut
                   </a></DropdownItem>

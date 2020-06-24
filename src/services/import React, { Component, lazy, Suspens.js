@@ -24,20 +24,29 @@ import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 import { getStyle, hexToRgba } from '@coreui/coreui/dist/js/coreui-utilities'
 
 import AuthService from "../../services/auth.service";
-import UserService from "../../services/user.service";
-
 
 import { HashRouter, Route, Switch, Redirect } from 'react-router-dom';
 
 
+
+
+
+
+
+
+
+
+
 const Widget03 = lazy(() => import('../../views/Widgets/Widget03'));
-const user = JSON.parse(localStorage.getItem('user'));
 
 const brandPrimary = getStyle('--primary')
 const brandSuccess = getStyle('--success')
 const brandInfo = getStyle('--info')
 const brandWarning = getStyle('--warning')
 const brandDanger = getStyle('--danger')
+
+
+const user = JSON.parse(localStorage.getItem('user'));
 
 // Card Chart 1
 const cardChartData1 = {
@@ -477,13 +486,16 @@ class Dashboard extends Component {
 
   componentDidMount() {
     fetch("http://localhost:8080/api/dashboard/dummy", {
-
-    mode: 'no-cors',
-    method: 'GET',
-    headers: { 'Authorization': 'Bearer user.accessToken '},
-    credentials: 'include'
+        mode: 'no-cors',
+        method: 'GET',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {
+            'Authorization': 'bearer user.accessToken',
+            'Content-Type': 'application/json'
+        }
     })
-.then(res => res.json())
+      .then(res => res.json())
       .then(parsedJSON => parsedJSON.results.map(data => (
         {
           id: `${data.id.name}`,
@@ -493,6 +505,8 @@ class Dashboard extends Component {
           thumbnail: `${data.dob.age}`,
 
         }
+
+
       )))
       .then(items => this.setState({
         items,
@@ -662,7 +676,7 @@ return (
                 <div className="small text-muted">June 2020</div>
               </Col>
               <Col sm="7" className="d-none d-sm-inline-block">
-                {/*<Button color="primary" className="float-right"><i className="icon-cloud-download"></i></Button>*/}
+                <Button color="primary" className="float-right"><i className="icon-cloud-download"></i></Button>
                 <ButtonToolbar className="float-right" aria-label="Toolbar with button groups">
                   <ButtonGroup className="mr-3" aria-label="First group">
                     <Button color="outline-secondary" onClick={() => this.onRadioBtnClick(1)} active={this.state.radioSelected === 1}>Day</Button>
@@ -680,8 +694,8 @@ return (
             <Row className="text-center">
               <Col sm={12} md className="mb-sm-2 mb-0">
               <div className="text-muted">Offer Accepted</div>
-                <strong>9.4M (90%)</strong>
-                <Progress className="progress-xs mt-2" color="success" value="90" />
+                <strong>9.4M (64%)</strong>
+                <Progress className="progress-xs mt-2" color="success" value={thumbnail} />
               </Col>
         
               <Col sm={12} md className="mb-sm-2 mb-0">
