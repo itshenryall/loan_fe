@@ -24,8 +24,6 @@ import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 import { getStyle, hexToRgba } from '@coreui/coreui/dist/js/coreui-utilities'
 
 import AuthService from "../../services/auth.service";
-import UserService from "../../services/user.service";
-
 
 import { HashRouter, Route, Switch, Redirect } from 'react-router-dom';
 
@@ -475,9 +473,8 @@ class Dashboard extends Component {
   }
 
   componentDidMount() {
-   
     let user = JSON.parse(localStorage.getItem('user'));
-    console.log(user.accessToken)
+    console.log('token' + user.accessToken)
     fetch("http://localhost:8080/api/dashboard/dummy", {
  
        mode: 'no-cors',
@@ -489,7 +486,7 @@ class Dashboard extends Component {
           },
           
         })
-        
+
       .then(res => res.json())
       .then(parsedJSON => parsedJSON.results.map(data => (
         {
@@ -507,16 +504,6 @@ class Dashboard extends Component {
       }))
       .catch(error => console.log('parsing failed', error))
   }
-
-
-
-
-
-
-
-
-
-
 
   toggle() {
     this.setState({
@@ -679,7 +666,7 @@ return (
                 <div className="small text-muted">June 2020</div>
               </Col>
               <Col sm="7" className="d-none d-sm-inline-block">
-                {/*<Button color="primary" className="float-right"><i className="icon-cloud-download"></i></Button>*/}
+                <Button color="primary" className="float-right"><i className="icon-cloud-download"></i></Button>
                 <ButtonToolbar className="float-right" aria-label="Toolbar with button groups">
                   <ButtonGroup className="mr-3" aria-label="First group">
                     <Button color="outline-secondary" onClick={() => this.onRadioBtnClick(1)} active={this.state.radioSelected === 1}>Day</Button>
@@ -698,7 +685,7 @@ return (
               <Col sm={12} md className="mb-sm-2 mb-0">
               <div className="text-muted">Offer Accepted</div>
                 <strong>9.4M (90%)</strong>
-                <Progress className="progress-xs mt-2" color="success" value="90" />
+                <Progress className="progress-xs mt-2" color="success" value={thumbnail}/>
               </Col>
         
               <Col sm={12} md className="mb-sm-2 mb-0">
@@ -772,6 +759,13 @@ return (
       </Col>
     </Row> */}
 
+
+
+
+{
+         items.length > 0 ? items.map(item => {
+         const {id, firstName, lastName, location, thumbnail} = item;
+          return (
     <Row>
       <Col>
         <Card>
@@ -811,8 +805,8 @@ return (
                     </span>
                   </div>
                   <div className="progress-group-bars">
-                    <Progress className="progress-xs" color="info" value="34" />
-                    <Progress className="progress-xs" color="danger" value="78" />
+                    <Progress className="progress-xs" color="info" value={thumbnail} />
+                    <Progress className="progress-xs" color="danger" value={thumbnail} />
                   </div>
                 </div>
                 <div className="progress-group mb-4">
@@ -822,8 +816,8 @@ return (
                     </span>
                   </div>
                   <div className="progress-group-bars">
-                    <Progress className="progress-xs" color="info" value="56" />
-                    <Progress className="progress-xs" color="danger" value="94" />
+                    <Progress className="progress-xs" color="info" value={thumbnail} />
+                    <Progress className="progress-xs" color="danger" value={thumbnail} />
                   </div>
                 </div>
                 <div className="progress-group mb-4">
@@ -833,8 +827,8 @@ return (
                     </span>
                   </div>
                   <div className="progress-group-bars">
-                    <Progress className="progress-xs" color="info" value="12" />
-                    <Progress className="progress-xs" color="danger" value="67" />
+                    <Progress className="progress-xs" color="info" value={thumbnail} />
+                    <Progress className="progress-xs" color="danger" value={thumbnail} />
                   </div>
                 </div>
                 <div className="progress-group mb-4">
@@ -844,8 +838,8 @@ return (
                     </span>
                   </div>
                   <div className="progress-group-bars">
-                    <Progress className="progress-xs" color="info" value="43" />
-                    <Progress className="progress-xs" color="danger" value="91" />
+                    <Progress className="progress-xs" color="info" value={thumbnail} />
+                    <Progress className="progress-xs" color="danger" value={thumbnail} />
                   </div>
                 </div>
                 <div className="progress-group mb-4">
@@ -856,8 +850,8 @@ return (
                   </div>
                  
                   <div className="progress-group-bars">
-                    <Progress className="progress-xs" color="info" value="9" />
-                    <Progress className="progress-xs" color="danger" value="69" />
+                    <Progress className="progress-xs" color="info" value={thumbnail} />
+                    <Progress className="progress-xs" color="danger" value={thumbnail}/>
                   </div>
                 </div>
                 <div className="legend text-center">
@@ -881,7 +875,7 @@ return (
                       <span className="ml-auto font-weight-bold">43%</span>
                     </div>
                     <div className="progress-group-bars">
-                      <Progress className="progress-xs" color="warning" value="43" />
+                      <Progress className="progress-xs" color="warning" value={thumbnail} />
                     </div>
                   </div>
                   <div className="progress-group mb-5">
@@ -891,7 +885,7 @@ return (
                       <span className="ml-auto font-weight-bold">37%</span>
                     </div>
                     <div className="progress-group-bars">
-                      <Progress className="progress-xs" color="warning" value="37" />
+                      <Progress className="progress-xs" color="warning" value={thumbnail} />
                     </div>
                   </div>
                   <div className="progress-group">
@@ -901,7 +895,7 @@ return (
                       <span className="ml-auto font-weight-bold">191,235 <span className="text-muted small">(56%)</span></span>
                     </div>
                     <div className="progress-group-bars">
-                      <Progress className="progress-xs" color="success" value="56" />
+                      <Progress className="progress-xs" color="success"value={thumbnail} />
                     </div>
                   </div>
                   <div className="progress-group">
@@ -911,7 +905,7 @@ return (
                       <span className="ml-auto font-weight-bold">51,223 <span className="text-muted small">(15%)</span></span>
                     </div>
                     <div className="progress-group-bars">
-                      <Progress className="progress-xs" color="success" value="15" />
+                      <Progress className="progress-xs" color="success" value={thumbnail} />
                     </div>
                   </div>
                   <div className="progress-group">
@@ -921,7 +915,7 @@ return (
                       <span className="ml-auto font-weight-bold">37,564 <span className="text-muted small">(11%)</span></span>
                     </div>
                     <div className="progress-group-bars">
-                      <Progress className="progress-xs" color="success" value="11" />
+                      <Progress className="progress-xs" color="success" value={thumbnail} />
                     </div>
                   </div>
                   <div className="progress-group">
@@ -931,7 +925,7 @@ return (
                       <span className="ml-auto font-weight-bold">27,319 <span className="text-muted small">(8%)</span></span>
                     </div>
                     <div className="progress-group-bars">
-                      <Progress className="progress-xs" color="success" value="8" />
+                      <Progress className="progress-xs" color="success" value={thumbnail} />
                     </div>
                   </div>
 
@@ -942,7 +936,7 @@ return (
                       <span className="ml-auto font-weight-bold">19,319 <span className="text-muted small">(4%)</span></span>
                     </div>
                     <div className="progress-group-bars">
-                      <Progress className="progress-xs" color="success" value="8" />
+                      <Progress className="progress-xs" color="success" value={thumbnail} />
                     </div>
                   </div>
 
@@ -985,7 +979,7 @@ return (
                       <small className="text-muted">Jun 11, 2020 - Jul 10, 2020</small>
                     </div>
                   </div>
-                  <Progress className="progress-xs" color="success" value="50" />
+                  <Progress className="progress-xs" color="success" value={thumbnail} />
                 </td>
                 <td className="text-center">
                 IDR 10k Balance
@@ -1016,7 +1010,7 @@ return (
                       <small className="text-muted">Jun 11, 2020 - Jul 10, 2020</small>
                     </div>
                   </div>
-                  <Progress className="progress-xs" color="info" value="10" />
+                  <Progress className="progress-xs" color="info" value={thumbnail} />
                 </td>
                 <td className="text-center">
                 IDR 10k Balance
@@ -1046,7 +1040,7 @@ return (
                       <small className="text-muted">Jun 11, 2020 - Jul 10, 2020</small>
                     </div>
                   </div>
-                  <Progress className="progress-xs" color="warning" value="74" />
+                  <Progress className="progress-xs" color="warning" value={thumbnail} />
                 </td>
                 <td className="text-center">
                 IDR 10k Balance
@@ -1076,7 +1070,7 @@ return (
                       <small className="text-muted">Jun 11, 2020 - Jul 10, 2020</small>
                     </div>
                   </div>
-                  <Progress className="progress-xs" color="danger" value="98" />
+                  <Progress className="progress-xs" color="danger" value={thumbnail} />
                 </td>
                 <td className="text-center">
                 IDR 10k Balance
@@ -1106,7 +1100,7 @@ return (
                       <small className="text-muted">Jun 11, 2020 - Jul 10, 2020</small>
                     </div>
                   </div>
-                  <Progress className="progress-xs" color="info" value="22" />
+                  <Progress className="progress-xs" color="info" value={thumbnail} />
                 </td>
                 <td className="text-center">
                 IDR 10k Balance
@@ -1136,7 +1130,7 @@ return (
                       <small className="text-muted">Jun 11, 2020 - Jul 10, 2020</small>
                     </div>
                   </div>
-                  <Progress className="progress-xs" color="success" value="43" />
+                  <Progress className="progress-xs" color="success" value={thumbnail} />
                 </td>
                 <td className="text-center">
                 IDR 10k Balance
@@ -1153,6 +1147,13 @@ return (
       </Col>
     </Row>
  
+);
+}) : null
+}
+
+
+
+
   </div>
   
 );
