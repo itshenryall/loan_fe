@@ -31,7 +31,6 @@ import { HashRouter, Route, Switch, Redirect } from 'react-router-dom';
 
 
 const Widget03 = lazy(() => import('../../views/Widgets/Widget03'));
-const user = JSON.parse(localStorage.getItem('user'));
 
 const brandPrimary = getStyle('--primary')
 const brandSuccess = getStyle('--success')
@@ -476,14 +475,22 @@ class Dashboard extends Component {
   }
 
   componentDidMount() {
+   
+    let user = JSON.parse(localStorage.getItem('user'));
+    console.log(user.accessToken)
     fetch("http://localhost:8080/api/dashboard/dummy", {
-
-    mode: 'no-cors',
-    method: 'GET',
-    headers: { 'Authorization': 'Bearer user.accessToken '},
-    credentials: 'include'
-    })
-.then(res => res.json())
+ 
+       mode: 'no-cors',
+       method: 'GET',
+       withCredentials: true,
+       credentials: 'include',
+       headers:{
+                  Authorization: 'Bearer ' + user.accessToken,
+          },
+          
+        })
+        
+      .then(res => res.json())
       .then(parsedJSON => parsedJSON.results.map(data => (
         {
           id: `${data.id.name}`,
@@ -500,6 +507,16 @@ class Dashboard extends Component {
       }))
       .catch(error => console.log('parsing failed', error))
   }
+
+
+
+
+
+
+
+
+
+
 
   toggle() {
     this.setState({
