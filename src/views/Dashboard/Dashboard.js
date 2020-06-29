@@ -109,6 +109,8 @@ const cardChartData2 = {
   ],
 };
 
+console.log(cardChartData2);
+
 const cardChartOpts2 = {
   tooltips: {
     enabled: false,
@@ -366,6 +368,12 @@ const sparklineChartOpts = {
   },
 };
 
+
+
+
+
+
+
 // Main Chart
 
 //Random Numbers
@@ -459,6 +467,9 @@ const mainChartOpts = {
   },
 };
 
+
+
+
 class Dashboard extends Component {
   constructor(props) {
     super(props);
@@ -470,7 +481,14 @@ class Dashboard extends Component {
       currentUser: AuthService.getCurrentUser(),
       dropdownOpen: false,
       radioSelected: 2,
-      responseJson:[]
+      responseJson:[],
+      cardNotifReceived: [],
+      cardSentToScoring: [],
+      cardPushOffer: [],
+      cardTopupNotifReceived: [],
+      chartTransaction: [],
+      progressStatisticRepaid: [],
+      progressStatisticUnRepaid: []
     };
   }
 
@@ -491,18 +509,67 @@ class Dashboard extends Component {
 
 
 
+
+
   componentDidMount() {
     let user = JSON.parse(localStorage.getItem('user'));
     console.log('token' + user.accessToken)
-    fetch("http://localhost:8080/api/dashboard/dummy", {
+    Promise.all([
+    fetch("http://localhost:8080/api/dashboard/dummy-notif-received", {
        method: 'GET',
        withCredentials: true,
        headers:{
                   Authorization: 'Bearer ' + user.accessToken,
           },   
-        })
-      .then((res) => res.json())
+        }),
 
+        fetch("http://localhost:8080/api/dashboard/dummy-sent-to-scoring", {
+       method: 'GET',
+       withCredentials: true,
+       headers:{
+                  Authorization: 'Bearer ' + user.accessToken,
+          },   
+        }),
+
+        fetch("http://localhost:8080/api/dashboard/dummy-push-offer", {
+       method: 'GET',
+       withCredentials: true,
+       headers:{
+                  Authorization: 'Bearer ' + user.accessToken,
+          },   
+        }),
+
+      fetch("http://localhost:8080/api/dashboard/dummy-topup-notif-received", {
+       method: 'GET',
+       withCredentials: true,
+       headers:{
+                  Authorization: 'Bearer ' + user.accessToken,
+          },   
+        }),
+
+        fetch("http://localhost:8080/api/dashboard/dummy-transactions", {
+          method: 'GET',
+          withCredentials: true,
+          headers:{
+                     Authorization: 'Bearer ' + user.accessToken,
+             },   
+           }),
+
+
+
+           fetch("http://localhost:8080/api/dashboard/dummy-statistics-and-packages", {
+            method: 'GET',
+            withCredentials: true,
+            headers:{
+                       Authorization: 'Bearer ' + user.accessToken,
+               },   
+             }),
+
+      ])
+        
+      //.then((res) => res.json())
+      .then(([res1, res2, res3, res4, res5, res6]) => Promise.all([res1.json(), res2.json(), res3.json(), res4.json(), res5.json(), res6.json()]))
+  
 
 
 //      .then((responseJson) => {
@@ -513,22 +580,60 @@ class Dashboard extends Component {
 //    })
 
 
-    .then((responseJson) => {
-      this.setState({
-      currentUser: AuthService.getCurrentUser(),
-      isLoading: false,
-      data1: responseJson.data[0].dob.age,
-      data2: responseJson.data[0].name.card1,
-      data3: responseJson.data[0].cell
-    });
-      })
-      .catch((error) => {
+ //   .then((responseJson) => {
+ //     this.setState({
+ //     currentUser: AuthService.getCurrentUser(),
+ //     isLoading: false,
+ //     data1: responseJson.data[0].dob.age,
+ //     data2: responseJson.data[0].name.card1,
+ //     data3: responseJson.data[0].cell
+ //   });
+ //     })
+
+
+ .then(([data1, data2, data3, data4, data5, data6]) => this.setState({
+  currentUser: AuthService.getCurrentUser(),
+  isLoading: false,
+  cardNotifReceived: data1.data.totalNotifReceived, 
+  cardSentToScoring: data2.data.totalSentToScoring,
+  cardPushOffer: data3.data.totalPushOffer,
+  cardTopupNotifReceived: data4.data.totalTopUpNotifReceived,
+  chartTransactionOffersAccepted: data5.data.offersAccepted,
+  chartTransactionFullRepayment: data5.data.fullRepayment,
+  progresStaticAvailability: data6.data.serverAvailability,
+  progressAverageTPS: data6.data.averageTPS,
+  progressStatisticRepaid: data6.data.repaid,
+  progressStatisticUnRepaid: data6.data.unrepaid,
+  progressStatisticAverageOfPackages: data6.data.averageOfPackages[0].name,
+  progressStatisticCalculateOfPackage: data6.data.calculateOfPackages[0].value,
+  progressStaticnName: data6.data.calculateOfPackages[0].name
+
+}
+))
+    .catch((error) => {
       console.error(error);
       });
+
+
   }
+
+
     render () {
       const {currentUser} = this.state;
-      const {data1, data2} = this.state;
+      const {cardNotifReceived, 
+             cardSentToScoring,
+             cardPushOffer,
+             cardTopupNotifReceived,
+             chartTransactionOffersAccepted,
+             chartTransactionFullRepayment,
+             progresStaticAvailability,
+             progressAverageTPS,
+             progressStatisticRepaid,
+             progressStatisticUnRepaid,
+             progressStatisticAverageOfPackages,
+             progressStatisticCalculateOfPackage,
+             progressStaticnName,
+            } = this.state;
 
       if (currentUser === null) {
          return <Redirect to='/login'/>;
@@ -554,7 +659,7 @@ class Dashboard extends Component {
                       </DropdownMenu>
                     </ButtonDropdown>
                   </ButtonGroup>
-                  <div className="text-value"> {data1}</div>
+                  <div className="text-value"> {cardNotifReceived}</div>
                   <div>Notifs Received</div>
                 </CardBody>
                 <div className="chart-wrapper mx-3" style={{ height: '70px' }}>
@@ -577,7 +682,7 @@ class Dashboard extends Component {
                       </DropdownMenu>
                     </Dropdown>
                   </ButtonGroup>
-                  <div className="text-value"> {data2}</div>
+                  <div className="text-value"> {cardSentToScoring}</div>
                   <div>Sent to Scoring</div>
                 </CardBody>
                 <div className="chart-wrapper mx-3" style={{ height: '70px' }}>
@@ -601,9 +706,9 @@ class Dashboard extends Component {
                       </DropdownMenu>
                     </Dropdown>
                   </ButtonGroup>
-                  <div className="text-value"> {data1}</div>
+                  <div className="text-value"> {cardPushOffer}</div>
                   <div>Push Offer
-                   <strong>{currentUser.username}</strong>
+                  {/*<strong>{currentUser.username}</strong>*/}
                   </div>
       
                 </CardBody>
@@ -628,7 +733,7 @@ class Dashboard extends Component {
                       </DropdownMenu>
                     </ButtonDropdown>
                   </ButtonGroup>
-                  <div className="text-value"> {data1}</div>
+                  <div className="text-value"> {cardTopupNotifReceived}</div>
                   <div>Topup Notifs Received</div>
                 </CardBody>
                 <div className="chart-wrapper mx-3" style={{ height: '70px' }}>
@@ -638,486 +743,454 @@ class Dashboard extends Component {
             </Col>
           </Row>
 
-          <Row>
-            <Col>
-              <Card>
-                <CardBody>
-                  <Row>
-                    <Col sm="5">
-                      <CardTitle className="mb-0">Transactions</CardTitle>
-                      <div className="small text-muted">June 2020</div>
-                    </Col>
-                    <Col sm="7" className="d-none d-sm-inline-block">
-                      <Button color="primary" className="float-right"><i className="icon-cloud-download"></i></Button>
-                      <ButtonToolbar className="float-right" aria-label="Toolbar with button groups">
-                        <ButtonGroup className="mr-3" aria-label="First group">
-                          <Button color="outline-secondary" onClick={() => this.onRadioBtnClick(1)} active={this.state.radioSelected === 1}>Day</Button>
-                          <Button color="outline-secondary" onClick={() => this.onRadioBtnClick(2)} active={this.state.radioSelected === 2}>Month</Button>
-                          <Button color="outline-secondary" onClick={() => this.onRadioBtnClick(3)} active={this.state.radioSelected === 3}>Year</Button>
-                        </ButtonGroup>
-                      </ButtonToolbar>
-                    </Col>
-                  </Row>
-                <div className="chart-wrapper" style={{ height: 300 + 'px', marginTop: 40 + 'px' }}>
-                      <Line data={mainChart} options={mainChartOpts} height={300} />
+        
+
+
+
+
+
+    <Row>
+      <Col>
+        <Card>
+          <CardBody>
+            <Row>
+              <Col sm="5">
+                <CardTitle className="mb-0">Transactions</CardTitle>
+                <div className="small text-muted">June 2020</div>
+              </Col>
+              <Col sm="7" className="d-none d-sm-inline-block">
+                <Button color="primary" className="float-right"><i className="icon-cloud-download"></i></Button>
+                <ButtonToolbar className="float-right" aria-label="Toolbar with button groups">
+                  <ButtonGroup className="mr-3" aria-label="First group">
+                    <Button color="outline-secondary" onClick={() => this.onRadioBtnClick(1)} active={this.state.radioSelected === 1}>Day</Button>
+                    <Button color="outline-secondary" onClick={() => this.onRadioBtnClick(2)} active={this.state.radioSelected === 2}>Month</Button>
+                    <Button color="outline-secondary" onClick={() => this.onRadioBtnClick(3)} active={this.state.radioSelected === 3}>Year</Button>
+                  </ButtonGroup>
+                </ButtonToolbar>
+              </Col>
+            </Row>
+          <div className="chart-wrapper" style={{ height: 300 + 'px', marginTop: 40 + 'px' }}>
+                <Line data={mainChart} options={mainChartOpts} height={300} />
+               
+            </div>
+          </CardBody>
+          <CardFooter>
+            <Row className="text-center">
+              <Col sm={12} md className="mb-sm-2 mb-0">
+              <div className="text-muted">Offer Accepted</div>
+      <strong>{chartTransactionOffersAccepted} (95%)</strong>
+                <Progress className="progress-xs mt-2" color="success" value="95"/>
+              </Col>
+        
+              <Col sm={12} md className="mb-sm-2 mb-0">
+                <div className="text-muted">Full Repayment</div>
+                <strong>{chartTransactionFullRepayment} (60%)</strong>
+                <Progress className="progress-xs mt-2" color="warning" value="60" />
+              </Col>
+            </Row>
+          </CardFooter>
+        </Card>
+      </Col>
+    </Row>
+
+    <Row>
+      <Col>
+        <Card>
+          <CardHeader>
+            Statistic {' & '} Packages
+          </CardHeader>
+          <CardBody>
+            <Row>
+              <Col xs="12" md="6" xl="6">
+                <Row>
+                  <Col sm="6">
+                    <div className="callout callout-info">
+                      <small className="text-muted">Server Availability</small>
+                      <br />
+      <strong className="h4">{progresStaticAvailability}</strong>
+                      <div className="chart-wrapper">
+                        <Line data={makeSparkLineData(0, brandPrimary)} options={sparklineChartOpts} width={100} height={30} />
+                      </div>
+                    </div>
+                  </Col>
+                  <Col sm="6">
+                    <div className="callout callout-danger">
+                      <small className="text-muted">Avg.TPS</small>
+                      <br />
+      <strong className="h4">{progressAverageTPS}</strong>
+                      <div className="chart-wrapper">
+                        <Line data={makeSparkLineData(1, brandDanger)} options={sparklineChartOpts} width={100} height={30} />
+                      </div>
+                    </div>
+                  </Col>
+                </Row>
+                <hr className="mt-0" />
+                <div className="progress-group mb-4">
+                  <div className="progress-group-prepend">
+                    <span className="progress-group-text">
+                      IDR 5k Package
+                    </span>
                   </div>
-                </CardBody>
-                <CardFooter>
-                  <Row className="text-center">
-                    <Col sm={12} md className="mb-sm-2 mb-0">
-                    <div className="text-muted">Offer Accepted</div>
-                      <strong>9.4M (90%)</strong>
-                      <Progress className="progress-xs mt-2" color="success" value={data1}/>
-                    </Col>
-              
-                    <Col sm={12} md className="mb-sm-2 mb-0">
-                      <div className="text-muted">Full Repayment</div>
-                      <strong>3M (46%)</strong>
-                      <Progress className="progress-xs mt-2" color="warning" value={data1} />
-                    </Col>
-                    {/* <Col sm={12} md className="mb-sm-2 mb-0">
-                      <div className="text-muted">New Users</div>
-                      <strong>22.123 Users (80%)</strong>
-                      <Progress className="progress-xs mt-2" color="danger" value="80" />
-                    </Col>
-                    <Col sm={12} md className="mb-sm-2 mb-0 d-md-down-none">
-                      <div className="text-muted">Bounce Rate</div>
-                      <strong>Average Rate (40.15%)</strong>
-                      <Progress className="progress-xs mt-2" color="primary" value="40" />
-                    </Col> */}
-                  </Row>
-                </CardFooter>
-              </Card>
-            </Col>
-          </Row>
-      
-  
-      
-          {/* <Row>
-            <Col xs="6" sm="6" lg="3">
-              <Suspense fallback={this.loading()}>
-                <Widget03 dataBox={() => ({ variant: 'facebook', friends: '89k', feeds: '459' })} >
-                  <div className="chart-wrapper">
-                    <Line data={makeSocialBoxData(0)} options={socialChartOpts} height={90} />
+                  <div className="progress-group-bars">
+                    <Progress className="progress-xs" color="info" value={progressStatisticUnRepaid} />
+                    <Progress className="progress-xs" color="danger" value={progressStatisticUnRepaid} />
                   </div>
-                </Widget03>
-              </Suspense>
-            </Col>
-      
-            <Col xs="6" sm="6" lg="3">
-              <Suspense fallback={this.loading()}>
-                <Widget03 dataBox={() => ({ variant: 'twitter', followers: '973k', tweets: '1.792' })} >
-                  <div className="chart-wrapper">
-                    <Line data={makeSocialBoxData(1)} options={socialChartOpts} height={90} />
+                </div>
+                <div className="progress-group mb-4">
+                  <div className="progress-group-prepend">
+                    <span className="progress-group-text">
+                    {progressStatisticAverageOfPackages}
+                    </span>
                   </div>
-                </Widget03>
-              </Suspense>
-            </Col>
-      
-            <Col xs="6" sm="6" lg="3">
-              <Suspense fallback={this.loading()}>
-                <Widget03 dataBox={() => ({ variant: 'linkedin', contacts: '500+', feeds: '292' })} >
-                  <div className="chart-wrapper">
-                    <Line data={makeSocialBoxData(2)} options={socialChartOpts} height={90} />
+                  <div className="progress-group-bars">
+                    <Progress className="progress-xs" color="info" value={progressStatisticRepaid} />
+                    <Progress className="progress-xs" color="danger" value={progressStatisticRepaid} />
                   </div>
-                </Widget03>
-              </Suspense>
-            </Col>
-      
-            <Col xs="6" sm="6" lg="3">
-              <Suspense fallback={this.loading()}>
-                <Widget03 dataBox={() => ({ variant: 'google-plus', followers: '894', circles: '92' })} >
-                  <div className="chart-wrapper">
-                    <Line data={makeSocialBoxData(3)} options={socialChartOpts} height={90} />
+                </div>
+                <div className="progress-group mb-4">
+                  <div className="progress-group-prepend">
+                    <span className="progress-group-text">
+                    {progressStatisticAverageOfPackages}
+                    </span>
                   </div>
-                </Widget03>
-              </Suspense>
-            </Col>
-          </Row> */}
-      
-      
-      
-      
-          <Row>
-            <Col>
-              <Card>
-                <CardHeader>
-                  Statistic {' & '} Packages
-                </CardHeader>
-                <CardBody>
-                  <Row>
-                    <Col xs="12" md="6" xl="6">
-                      <Row>
-                        <Col sm="6">
-                          <div className="callout callout-info">
-                            <small className="text-muted">Server Availability</small>
-                            <br />
-                            <strong className="h4">9,123</strong>
-                            <div className="chart-wrapper">
-                              <Line data={makeSparkLineData(0, brandPrimary)} options={sparklineChartOpts} width={100} height={30} />
-                            </div>
-                          </div>
-                        </Col>
-                        <Col sm="6">
-                          <div className="callout callout-danger">
-                            <small className="text-muted">Avg.TPS</small>
-                            <br />
-                            <strong className="h4">22,643</strong>
-                            <div className="chart-wrapper">
-                              <Line data={makeSparkLineData(1, brandDanger)} options={sparklineChartOpts} width={100} height={30} />
-                            </div>
-                          </div>
-                        </Col>
-                      </Row>
-                      <hr className="mt-0" />
-                      <div className="progress-group mb-4">
-                        <div className="progress-group-prepend">
-                          <span className="progress-group-text">
-                            IDR 5k Package
-                          </span>
-                        </div>
-                        <div className="progress-group-bars">
-                          <Progress className="progress-xs" color="info" value={data1} />
-                          <Progress className="progress-xs" color="danger" value={data1} />
-                        </div>
-                      </div>
-                      <div className="progress-group mb-4">
-                        <div className="progress-group-prepend">
-                          <span className="progress-group-text">
-                          IDR 10k Package
-                          </span>
-                        </div>
-                        <div className="progress-group-bars">
-                          <Progress className="progress-xs" color="info" value={data1} />
-                          <Progress className="progress-xs" color="danger" value={data1} />
-                        </div>
-                      </div>
-                      <div className="progress-group mb-4">
-                        <div className="progress-group-prepend">
-                          <span className="progress-group-text">
-                          IDR 20k Package
-                          </span>
-                        </div>
-                        <div className="progress-group-bars">
-                          <Progress className="progress-xs" color="info" value={data1} />
-                          <Progress className="progress-xs" color="danger" value={data1} />
-                        </div>
-                      </div>
-                      <div className="progress-group mb-4">
-                        <div className="progress-group-prepend">
-                          <span className="progress-group-text">
-                          IDR 50k Package
-                          </span>
-                        </div>
-                        <div className="progress-group-bars">
-                          <Progress className="progress-xs" color="info" value={data1} />
-                          <Progress className="progress-xs" color="danger" value={data1} />
-                        </div>
-                      </div>
-                      <div className="progress-group mb-4">
-                        <div className="progress-group-prepend">
-                          <span className="progress-group-text">
-                          IDR 100k Package
-                          </span>
-                        </div>
-                       
-                        <div className="progress-group-bars">
-                          <Progress className="progress-xs" color="info" value={data1} />
-                          <Progress className="progress-xs" color="danger" value={data1}/>
-                        </div>
-                      </div>
-                      <div className="legend text-center">
-                        <small>
-                          <sup className="px-1"><Badge pill color="info">&nbsp;</Badge></sup>
-                          Accepted Offer
-                          &nbsp;
-                          <sup className="px-1"><Badge pill color="danger">&nbsp;</Badge></sup>
-                          Rejected Offer
-                        </small>
-                      </div>
-                    </Col>
-                    <Col xs="12" md="6" xl="6">
-                     
-                      {/* <hr className="mt-0" /> */}
-                      <ul>
-                        <div className="progress-group">
-                          <div className="progress-group-header">
-                            <i className="cui-dollar progress-group-icon"></i>
-                            <span className="title">Repaid</span>
-                            <span className="ml-auto font-weight-bold">43%</span>
-                          </div>
-                          <div className="progress-group-bars">
-                            <Progress className="progress-xs" color="warning" value={data1} />
-                          </div>
-                        </div>
-                        <div className="progress-group mb-5">
-                          <div className="progress-group-header">
-                            <i className="icon-close progress-group-icon"></i>
-                            <span className="title">Unrepaid</span>
-                            <span className="ml-auto font-weight-bold">37%</span>
-                          </div>
-                          <div className="progress-group-bars">
-                            <Progress className="progress-xs" color="warning" value={data1} />
-                          </div>
-                        </div>
-                        <div className="progress-group">
-                          <div className="progress-group-header">
-                            <i className="cui-info progress-group-icon"></i>
-                            <span className="title">IDR 5k Package</span>
-                            <span className="ml-auto font-weight-bold">191,235 <span className="text-muted small">(56%)</span></span>
-                          </div>
-                          <div className="progress-group-bars">
-                            <Progress className="progress-xs" color="success"value={data1} />
-                          </div>
-                        </div>
-                        <div className="progress-group">
-                          <div className="progress-group-header">
-                            <i className="cui-info progress-group-icon"></i>
-                            <span className="title">IDR 10k Package</span>
-                            <span className="ml-auto font-weight-bold">51,223 <span className="text-muted small">(15%)</span></span>
-                          </div>
-                          <div className="progress-group-bars">
-                            <Progress className="progress-xs" color="success" value={data1} />
-                          </div>
-                        </div>
-                        <div className="progress-group">
-                          <div className="progress-group-header">
-                            <i className="cui-info progress-group-icon"></i>
-                            <span className="title">IDR 20k Package</span>
-                            <span className="ml-auto font-weight-bold">37,564 <span className="text-muted small">(11%)</span></span>
-                          </div>
-                          <div className="progress-group-bars">
-                            <Progress className="progress-xs" color="success" value={data1} />
-                          </div>
-                        </div>
-                        <div className="progress-group">
-                          <div className="progress-group-header">
-                            <i className="cui-info progress-group-icon"></i>
-                            <span className="title">IDR 50k Package</span>
-                            <span className="ml-auto font-weight-bold">27,319 <span className="text-muted small">(8%)</span></span>
-                          </div>
-                          <div className="progress-group-bars">
-                            <Progress className="progress-xs" color="success" value={data1} />
-                          </div>
-                        </div>
-      
-                        <div className="progress-group">
-                          <div className="progress-group-header">
-                            <i className="cui-info progress-group-icon"></i>
-                            <span className="title">IDR 100k Package</span>
-                            <span className="ml-auto font-weight-bold">19,319 <span className="text-muted small">(4%)</span></span>
-                          </div>
-                          <div className="progress-group-bars">
-                            <Progress className="progress-xs" color="success" value={data1} />
-                          </div>
-                        </div>
-      
-                        <div className="divider text-center">
-                          <Button color="link" size="sm" className="text-muted" data-toggle="tooltip" data-placement="top"
-                                  title="" data-original-title="show more"><i className="icon-options"></i></Button>
-                        </div>
-                      </ul>
-                    </Col>
-                  </Row>
-                  <br />
-                  <Table hover responsive className="table-outline mb-0 d-none d-sm-table">
-                    <thead className="thead-light">
-                    <tr>
-                      <th>Package</th>
-                      <th className="text-center">Type</th>
-                      <th>Usage</th>
-                      <th className="text-center">Threshold</th>
-                      <th>Status</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                      
-                      <td>
-                        <div>IDR 5k Package</div>
-                        <div className="small text-muted">
-                          <span>New</span> | Registered: Jan 1, 2020
-                        </div>
-                      </td>
-                      <td className="text-center">
-                      Balance
-                      </td>
-                      <td>
-                        <div className="clearfix">
-                          <div className="float-left">
-                            <strong>50%</strong>
-                          </div>
-                          <div className="float-right">
-                            <small className="text-muted">Jun 11, 2020 - Jul 10, 2020</small>
-                          </div>
-                        </div>
-                        <Progress className="progress-xs" color="success" value={data1} />
-                      </td>
-                      <td className="text-center">
-                      IDR 10k Balance
-                      </td>
-                      <td>
-                        <div className="small text-muted">Last login</div>
-                        <strong>10 sec ago</strong>
-                      </td>
-                    </tr>
-                    <tr>
-                     
-                      <td>
-                        <div>IDR 5k Package</div>
-                        <div className="small text-muted">
-      
-                          <span>Recurring</span> | Registered: Jan 1, 2020
-                        </div>
-                      </td>
-                      <td className="text-center">
-                      Balance
-                      </td>
-                      <td>
-                        <div className="clearfix">
-                          <div className="float-left">
-                            <strong>10%</strong>
-                          </div>
-                          <div className="float-right">
-                            <small className="text-muted">Jun 11, 2020 - Jul 10, 2020</small>
-                          </div>
-                        </div>
-                        <Progress className="progress-xs" color="info" value={data1} />
-                      </td>
-                      <td className="text-center">
-                      IDR 10k Balance
-                      </td>
-                      <td>
-                        <div className="small text-muted">Last login</div>
-                        <strong>5 minutes ago</strong>
-                      </td>
-                    </tr>
-                    <tr>
-                     
-                      <td>
-                        <div>IDR 5k Package</div>
-                        <div className="small text-muted">
-                          <span>New</span> | Registered: Jan 1, 2020
-                        </div>
-                      </td>
-                      <td className="text-center">
-                      Balance
-                      </td>
-                      <td>
-                        <div className="clearfix">
-                          <div className="float-left">
-                            <strong>74%</strong>
-                          </div>
-                          <div className="float-right">
-                            <small className="text-muted">Jun 11, 2020 - Jul 10, 2020</small>
-                          </div>
-                        </div>
-                        <Progress className="progress-xs" color="warning" value={data1} />
-                      </td>
-                      <td className="text-center">
-                      IDR 10k Balance
-                      </td>
-                      <td>
-                        <div className="small text-muted">Last login</div>
-                        <strong>1 hour ago</strong>
-                      </td>
-                    </tr>
-                    <tr>
-                   
-                      <td>
-                        <div>IDR 5k Package</div>
-                        <div className="small text-muted">
-                          <span>New</span> | Registered: Jan 1, 2020
-                        </div>
-                      </td>
-                      <td className="text-center">
-                      Balance
-                      </td>
-                      <td>
-                        <div className="clearfix">
-                          <div className="float-left">
-                            <strong>98%</strong>
-                          </div>
-                          <div className="float-right">
-                            <small className="text-muted">Jun 11, 2020 - Jul 10, 2020</small>
-                          </div>
-                        </div>
-                        <Progress className="progress-xs" color="danger" value={data1} />
-                      </td>
-                      <td className="text-center">
-                      IDR 10k Balance
-                      </td>
-                      <td>
-                        <div className="small text-muted">Last login</div>
-                        <strong>Last month</strong>
-                      </td>
-                    </tr>
-                    <tr>
-                      
-                      <td>
-                        <div>IDR 5k Package</div>
-                        <div className="small text-muted">
-                          <span>New</span> | Registered: Jan 1, 2020
-                        </div>
-                      </td>
-                      <td className="text-center">
-                      Balance
-                      </td>
-                      <td>
-                        <div className="clearfix">
-                          <div className="float-left">
-                            <strong>22%</strong>
-                          </div>
-                          <div className="float-right">
-                            <small className="text-muted">Jun 11, 2020 - Jul 10, 2020</small>
-                          </div>
-                        </div>
-                        <Progress className="progress-xs" color="info" value={data1} />
-                      </td>
-                      <td className="text-center">
-                      IDR 10k Balance
-                      </td>
-                      <td>
-                        <div className="small text-muted">Last login</div>
-                        <strong>Last week</strong>
-                      </td>
-                    </tr>
-                    <tr>
-                      
-                      <td>
-                        <div>IDR 5k Package</div>
-                        <div className="small text-muted">
-                          <span>New</span> | Registered: Jan 1, 2020
-                        </div>
-                      </td>
-                      <td className="text-center">
-                        Balance
-                      </td>
-                      <td>
-                        <div className="clearfix">
-                          <div className="float-left">
-                            <strong>43%</strong>
-                          </div>
-                          <div className="float-right">
-                            <small className="text-muted">Jun 11, 2020 - Jul 10, 2020</small>
-                          </div>
-                        </div>
-                        <Progress className="progress-xs" color="success" value={data1} />
-                      </td>
-                      <td className="text-center">
-                      IDR 10k Balance
-                      </td>
-                      <td>
-                        <div className="small text-muted">Last login</div>
-                        <strong>Yesterday</strong>
-                      </td>
-                    </tr>
-                    </tbody>
-                  </Table>
-                </CardBody>
-              </Card>
-            </Col>
-          </Row>
+                  <div className="progress-group-bars">
+                    <Progress className="progress-xs" color="info" value={progressStatisticRepaid} />
+                    <Progress className="progress-xs" color="danger" value={progressStatisticRepaid} />
+                  </div>
+                </div>
+                <div className="progress-group mb-4">
+                  <div className="progress-group-prepend">
+                    <span className="progress-group-text">
+                    {progressStatisticAverageOfPackages}
+                    </span>
+                  </div>
+                  <div className="progress-group-bars">
+                    <Progress className="progress-xs" color="info" value={progressStatisticRepaid} />
+                    <Progress className="progress-xs" color="danger" value={progressStatisticRepaid} />
+                  </div>
+                </div>
+                <div className="progress-group mb-4">
+                  <div className="progress-group-prepend">
+                    <span className="progress-group-text">
+                    {progressStatisticAverageOfPackages}
+                    </span>
+                  </div>
+                 
+                  <div className="progress-group-bars">
+                    <Progress className="progress-xs" color="info" value={progressStatisticRepaid} />
+                    <Progress className="progress-xs" color="danger" value={progressStatisticRepaid}/>
+                  </div>
+                </div>
+                <div className="legend text-center">
+                  <small>
+                    <sup className="px-1"><Badge pill color="info">&nbsp;</Badge></sup>
+                    Accepted Offer
+                    &nbsp;
+                    <sup className="px-1"><Badge pill color="danger">&nbsp;</Badge></sup>
+                    Rejected Offer
+                  </small>
+                </div>
+              </Col>
+              <Col xs="12" md="6" xl="6">
+               
+                {/* <hr className="mt-0" /> */}
+                <ul>
+                  <div className="progress-group">
+                    <div className="progress-group-header">
+                      <i className="cui-dollar progress-group-icon"></i>
+                      <span className="title">Repaid</span>
+      <span className="ml-auto font-weight-bold">{progressStatisticRepaid}%</span>
+                    </div>
+                    <div className="progress-group-bars">
+                      <Progress className="progress-xs" color="warning" value={progressStatisticRepaid} />
+                    </div>
+                  </div>
+                  <div className="progress-group mb-5">
+                    <div className="progress-group-header">
+                      <i className="icon-close progress-group-icon"></i>
+                      <span className="title">Unrepaid</span>
+      <span className="ml-auto font-weight-bold">{progressStatisticUnRepaid}%</span>
+                    </div>
+                    <div className="progress-group-bars">
+                      <Progress className="progress-xs" color="warning" value={progressStatisticUnRepaid} />
+                    </div>
+                  </div>
+                  <div className="progress-group">
+                    <div className="progress-group-header">
+                      <i className="cui-info progress-group-icon"></i>
+      <span className="title">{progressStaticnName}</span>
+      <span className="ml-auto font-weight-bold">{progressStatisticCalculateOfPackage} <span className="text-muted small">(56%)</span></span>
+                    </div>
+                    <div className="progress-group-bars">
+                      <Progress className="progress-xs" color="success"value={progressStatisticRepaid} />
+                    </div>
+                  </div>
+                  <div className="progress-group">
+                    <div className="progress-group-header">
+                      <i className="cui-info progress-group-icon"></i>
+                      <span className="title">{progressStaticnName}</span>
+                      <span className="ml-auto font-weight-bold">{progressStatisticCalculateOfPackage}  <span className="text-muted small">(15%)</span></span>
+                    </div>
+                    <div className="progress-group-bars">
+                      <Progress className="progress-xs" color="success" value={progressStatisticRepaid} />
+                    </div>
+                  </div>
+                  <div className="progress-group">
+                    <div className="progress-group-header">
+                      <i className="cui-info progress-group-icon"></i>
+                      <span className="title">{progressStaticnName}</span>
+                      <span className="ml-auto font-weight-bold">{progressStatisticCalculateOfPackage}  <span className="text-muted small">(11%)</span></span>
+                    </div>
+                    <div className="progress-group-bars">
+                      <Progress className="progress-xs" color="success" value={progressStatisticRepaid} />
+                    </div>
+                  </div>
+                  <div className="progress-group">
+                    <div className="progress-group-header">
+                      <i className="cui-info progress-group-icon"></i>
+                      <span className="title">{progressStaticnName}</span>
+                      <span className="ml-auto font-weight-bold">{progressStatisticCalculateOfPackage}  <span className="text-muted small">(8%)</span></span>
+                    </div>
+                    <div className="progress-group-bars">
+                      <Progress className="progress-xs" color="success" value={progressStatisticRepaid} />
+                    </div>
+                  </div>
+
+                  <div className="progress-group">
+                    <div className="progress-group-header">
+                      <i className="cui-info progress-group-icon"></i>
+                      <span className="title">{progressStaticnName}</span>
+                      <span className="ml-auto font-weight-bold">{progressStatisticCalculateOfPackage} <span className="text-muted small">(4%)</span></span>
+                    </div>
+                    <div className="progress-group-bars">
+                      <Progress className="progress-xs" color="success" value={progressStatisticRepaid} />
+                    </div>
+                  </div>
+
+                  <div className="divider text-center">
+                    <Button color="link" size="sm" className="text-muted" data-toggle="tooltip" data-placement="top"
+                            title="" data-original-title="show more"><i className="icon-options"></i></Button>
+                  </div>
+                </ul>
+              </Col>
+            </Row>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <br />
+            <Table hover responsive className="table-outline mb-0 d-none d-sm-table">
+              <thead className="thead-light">
+              <tr>
+                <th>Package</th>
+                <th className="text-center">Type</th>
+                <th>Usage</th>
+                <th className="text-center">Threshold</th>
+                <th>Status</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                
+                <td>
+                  <div>IDR 5k Package</div>
+                  <div className="small text-muted">
+                    <span>New</span> | Registered: Jan 1, 2020
+                  </div>
+                </td>
+                <td className="text-center">
+                Balance
+                </td>
+                <td>
+                  <div className="clearfix">
+                    <div className="float-left">
+                      <strong>50%</strong>
+                    </div>
+                    <div className="float-right">
+                      <small className="text-muted">Jun 11, 2020 - Jul 10, 2020</small>
+                    </div>
+                  </div>
+                  <Progress className="progress-xs" color="success" value={progressStatisticRepaid} />
+                </td>
+                <td className="text-center">
+                IDR 10k Balance
+                </td>
+                <td>
+                  <div className="small text-muted">Last login</div>
+                  <strong>10 sec ago</strong>
+                </td>
+              </tr>
+              <tr>
+               
+                <td>
+                  <div>IDR 5k Package</div>
+                  <div className="small text-muted">
+
+                    <span>Recurring</span> | Registered: Jan 1, 2020
+                  </div>
+                </td>
+                <td className="text-center">
+                Balance
+                </td>
+                <td>
+                  <div className="clearfix">
+                    <div className="float-left">
+                      <strong>10%</strong>
+                    </div>
+                    <div className="float-right">
+                      <small className="text-muted">Jun 11, 2020 - Jul 10, 2020</small>
+                    </div>
+                  </div>
+                  <Progress className="progress-xs" color="info" value={progressStatisticRepaid} />
+                </td>
+                <td className="text-center">
+                IDR 10k Balance
+                </td>
+                <td>
+                  <div className="small text-muted">Last login</div>
+                  <strong>5 minutes ago</strong>
+                </td>
+              </tr>
+              <tr>
+               
+                <td>
+                  <div>IDR 5k Package</div>
+                  <div className="small text-muted">
+                    <span>New</span> | Registered: Jan 1, 2020
+                  </div>
+                </td>
+                <td className="text-center">
+                Balance
+                </td>
+                <td>
+                  <div className="clearfix">
+                    <div className="float-left">
+                      <strong>74%</strong>
+                    </div>
+                    <div className="float-right">
+                      <small className="text-muted">Jun 11, 2020 - Jul 10, 2020</small>
+                    </div>
+                  </div>
+                  <Progress className="progress-xs" color="warning" value={progressStatisticRepaid} />
+                </td>
+                <td className="text-center">
+                IDR 10k Balance
+                </td>
+                <td>
+                  <div className="small text-muted">Last login</div>
+                  <strong>1 hour ago</strong>
+                </td>
+              </tr>
+              <tr>
+             
+                <td>
+                  <div>IDR 5k Package</div>
+                  <div className="small text-muted">
+                    <span>New</span> | Registered: Jan 1, 2020
+                  </div>
+                </td>
+                <td className="text-center">
+                Balance
+                </td>
+                <td>
+                  <div className="clearfix">
+                    <div className="float-left">
+                      <strong>98%</strong>
+                    </div>
+                    <div className="float-right">
+                      <small className="text-muted">Jun 11, 2020 - Jul 10, 2020</small>
+                    </div>
+                  </div>
+                  <Progress className="progress-xs" color="danger" value={progressStatisticRepaid} />
+                </td>
+                <td className="text-center">
+                IDR 10k Balance
+                </td>
+                <td>
+                  <div className="small text-muted">Last login</div>
+                  <strong>Last month</strong>
+                </td>
+              </tr>
+              <tr>
+                
+                <td>
+                  <div>IDR 5k Package</div>
+                  <div className="small text-muted">
+                    <span>New</span> | Registered: Jan 1, 2020
+                  </div>
+                </td>
+                <td className="text-center">
+                Balance
+                </td>
+                <td>
+                  <div className="clearfix">
+                    <div className="float-left">
+                      <strong>22%</strong>
+                    </div>
+                    <div className="float-right">
+                      <small className="text-muted">Jun 11, 2020 - Jul 10, 2020</small>
+                    </div>
+                  </div>
+                  <Progress className="progress-xs" color="info" value={progressStatisticRepaid} />
+                </td>
+                <td className="text-center">
+                IDR 10k Balance
+                </td>
+                <td>
+                  <div className="small text-muted">Last login</div>
+                  <strong>Last week</strong>
+                </td>
+              </tr>
+              <tr>
+                
+                <td>
+                  <div>IDR 5k Package</div>
+                  <div className="small text-muted">
+                    <span>New</span> | Registered: Jan 1, 2020
+                  </div>
+                </td>
+                <td className="text-center">
+                  Balance
+                </td>
+                <td>
+                  <div className="clearfix">
+                    <div className="float-left">
+                      <strong>43%</strong>
+                    </div>
+                    <div className="float-right">
+                      <small className="text-muted">Jun 11, 2020 - Jul 10, 2020</small>
+                    </div>
+                  </div>
+                  <Progress className="progress-xs" color="success" value={progressStatisticRepaid} />
+                </td>
+                <td className="text-center">
+                IDR 10k Balance
+                </td>
+                <td>
+                  <div className="small text-muted">Last login</div>
+                  <strong>Yesterday</strong>
+                </td>
+              </tr>
+              </tbody>
+            </Table>
+          </CardBody>
+        </Card>
+      </Col>
+    </Row>
       
         </div>
         
