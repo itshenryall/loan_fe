@@ -485,7 +485,7 @@ class Dashboard extends Component {
   }
 
   componentDidMount() {
-    fetch("http://localhost:8080/api/dashboard/dummy", {
+    fetch("178.128.222.35:9100/loan-engine-web-services/api/dashboard/dummy", {
         mode: 'no-cors',
         method: 'GET',
         withCredentials: true,

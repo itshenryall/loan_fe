@@ -26,6 +26,9 @@ import { getStyle, hexToRgba } from '@coreui/coreui/dist/js/coreui-utilities'
 import AuthService from "../../services/auth.service";
 import authHeader from '../../services/auth-header';
 
+import axios from "axios";
+import List from "./List";
+import Listx from "./Listx";
 
 import { HashRouter, Route, Switch, Redirect } from 'react-router-dom';
 
@@ -38,6 +41,251 @@ const brandInfo = getStyle('--info')
 const brandWarning = getStyle('--warning')
 const brandDanger = getStyle('--danger')
 
+
+
+class Dashboard extends Component {
+  constructor(props) {
+    super(props);
+
+    this.toggle = this.toggle.bind(this);
+    this.onRadioBtnClick = this.onRadioBtnClick.bind(this);
+
+    this.state = {
+      currentUser: AuthService.getCurrentUser(),
+      dropdownOpen: false,
+      radioSelected: 2,
+      responseJson:[],
+      data: [],
+      buatChart: [],
+      mainChart: []
+    };
+  }
+
+  toggle() {
+    this.setState({
+      dropdownOpen: !this.state.dropdownOpen,
+    });
+  }
+
+  onRadioBtnClick(radioSelected) {
+    this.setState({
+      radioSelected: radioSelected,
+    });
+  }
+  
+  loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>
+
+
+
+
+
+
+  componentDidMount() {
+    let user = JSON.parse(localStorage.getItem('user'));
+    console.log('token' + user.accessToken)
+
+    Promise.all([
+    fetch("http://178.128.222.35:9100/loan-engine-web-services/api/dashboard/dummy-notif-received", {
+       method: 'GET',
+       withCredentials: true,
+       headers:{
+                  Authorization: 'Bearer ' + user.accessToken,
+          },   
+        }),
+
+        fetch("http://178.128.222.35:9100/loan-engine-web-services/api/dashboard/dummy-sent-to-scoring", {
+       method: 'GET',
+       withCredentials: true,
+       headers:{
+                  Authorization: 'Bearer ' + user.accessToken,
+          },   
+        }),
+
+        fetch("http://178.128.222.35:9100/loan-engine-web-services/api/dashboard/dummy-push-offer", {
+       method: 'GET',
+       withCredentials: true,
+       headers:{
+                  Authorization: 'Bearer ' + user.accessToken,
+          },   
+        }),
+
+      fetch("http://178.128.222.35:9100/loan-engine-web-services/api/dashboard/dummy-topup-notif-received", {
+       method: 'GET',
+       withCredentials: true,
+       headers:{
+                  Authorization: 'Bearer ' + user.accessToken,
+          },   
+        }),
+
+        fetch("http://178.128.222.35:9100/loan-engine-web-services/api/dashboard/dummy-transactions", {
+          method: 'GET',
+          withCredentials: true,
+          headers:{
+                     Authorization: 'Bearer ' + user.accessToken,
+             },   
+           }),
+
+
+
+           fetch("http://178.128.222.35:9100/loan-engine-web-services/api/dashboard/dummy-statistics-and-packages", {
+            method: 'GET',
+            withCredentials: true,
+            headers:{
+                       Authorization: 'Bearer ' + user.accessToken,
+               },   
+             }),
+
+
+             fetch("http://www.json-generator.com/api/json/get/cfxsabgOSq?indent=2"),
+
+
+             fetch("http://www.json-generator.com/api/json/get/cfIzcYmlnS?indent=2"),
+            
+
+      ])
+
+
+        
+      //.then((res) => res.json())
+      .then(([res1, res2, res3, res4, res5, res6, res7, res8]) => Promise.all([res1.json(), res2.json(), res3.json(), res4.json(), res5.json(), res6.json(), res7.json(), res8.json()]))
+      
+     
+     
+ .then(([data1, data2, data3, data4, data5, data6, data7, data8]) => this.setState({
+  currentUser: AuthService.getCurrentUser(),
+  isLoading: false,
+
+  //cardData
+  cardNotifReceived: data1.data.totalNotifReceived, 
+  cardSentToScoring: data2.data.totalSentToScoring,
+  cardPushOffer: data3.data.totalPushOffer,
+  cardTopupNotifReceived: data4.data.totalTopUpNotifReceived,
+
+  //detail chart data
+  transactionDate: data5.data.transactionDate,
+
+  //chart data
+  chartTransactionDetails: data5.data.transactionsDetails,
+  buatChart: data5.data.transactionsDetails,
+
+  //dibawah chart 
+  chartTransactionOffersAccepted: data5.data.offersAccepted,
+  chartTransactionFullRepayment: data5.data.fullRepayment,
+  
+
+  //server availability
+  progresStaticAvailability: data6.data.serverAvailability,
+  progressAverageTPS: data6.data.averageTPS,
+  
+  //repaid unrepaid
+  progressStatisticRepaid: data6.data.repaid,
+  progressStatisticUnRepaid: data6.data.unrepaid,
+
+  //progress bar kiri package
+  progressStatisticAverageOfPackages0: data6.data.averageOfPackages[0].name,
+  progressStatisticAverageOfPackages1: data6.data.averageOfPackages[1].name,
+  progressStatisticAverageOfPackages2: data6.data.averageOfPackages[2].name,
+  progressStatisticAverageOfPackages3: data6.data.averageOfPackages[3].name,
+  progressStatisticAverageOfPackages4: data6.data.averageOfPackages[4].name,
+  progressStatisticAverageOfPackagesAO: data6.data.averageOfPackages[0].acceptedOffer,
+  progressStatisticAverageOfPackagesAO1: data6.data.averageOfPackages[1].acceptedOffer,
+  progressStatisticAverageOfPackagesAO2: data6.data.averageOfPackages[2].acceptedOffer,
+  progressStatisticAverageOfPackagesAO3: data6.data.averageOfPackages[3].acceptedOffer,
+  progressStatisticAverageOfPackagesAO4: data6.data.averageOfPackages[4].acceptedOffer,
+  progressStatisticAverageOfPackagesRO: data6.data.averageOfPackages[0].rejectedOffer,
+  progressStatisticAverageOfPackagesRO1: data6.data.averageOfPackages[1].rejectedOffer,
+  progressStatisticAverageOfPackagesRO2: data6.data.averageOfPackages[2].rejectedOffer,
+  progressStatisticAverageOfPackagesRO3: data6.data.averageOfPackages[3].rejectedOffer,
+  progressStatisticAverageOfPackagesRO4: data6.data.averageOfPackages[4].rejectedOffer,
+
+  //progress bar kanan package
+  progressStatisticCalculateOfPackageName0: data6.data.calculateOfPackages[0].name,
+  progressStatisticCalculateOfPackageName1: data6.data.calculateOfPackages[1].name,
+  progressStatisticCalculateOfPackageName2: data6.data.calculateOfPackages[2].name,
+  progressStatisticCalculateOfPackageName3: data6.data.calculateOfPackages[3].name,
+  progressStatisticCalculateOfPackageName4: data6.data.calculateOfPackages[4].name,
+  progressStatisticCalculateOfPackageNameValue0: data6.data.calculateOfPackages[0].value,
+  progressStatisticCalculateOfPackageNameValue1: data6.data.calculateOfPackages[1].value,
+  progressStatisticCalculateOfPackageNameValue2: data6.data.calculateOfPackages[2].value,
+  progressStatisticCalculateOfPackageNameValue3: data6.data.calculateOfPackages[3].value,
+  progressStatisticCalculateOfPackageNameValue4: data6.data.calculateOfPackages[4].value,
+
+  //table data
+  data: data6.data.packages,
+
+  //testing data chart
+  chartData1: data7,
+  chartData2: data8,
+
+
+
+}
+))
+
+    .catch((error) => {
+      console.error(error);
+      });
+
+
+  }
+
+
+    render () {
+      const {currentUser} = this.state;
+      const {cardNotifReceived, 
+             cardSentToScoring,
+             chartData1,
+             chartData2,
+             dataPackage,
+             chartTransactionDetails,
+             transactionDate,
+             cardPushOffer,
+             cardTopupNotifReceived,
+             chartTransactionOffersAccepted,
+             chartTransactionFullRepayment,
+             progresStaticAvailability,
+             progressAverageTPS,
+             progressStatisticRepaid,
+             progressStatisticUnRepaid,
+             progressStatisticAverageOfPackages0,
+             progressStatisticAverageOfPackages1,
+             progressStatisticAverageOfPackages2,
+             progressStatisticAverageOfPackages3,
+             progressStatisticAverageOfPackages4,
+             progressStatisticAverageOfPackagesAO,
+             progressStatisticAverageOfPackagesAO1,
+             progressStatisticAverageOfPackagesAO2,
+             progressStatisticAverageOfPackagesAO3,
+             progressStatisticAverageOfPackagesAO4,
+             progressStatisticAverageOfPackagesRO,
+             progressStatisticAverageOfPackagesRO1,
+             progressStatisticAverageOfPackagesRO2,
+             progressStatisticAverageOfPackagesRO3,
+             progressStatisticAverageOfPackagesRO4,
+             progressStatisticCalculateOfPackageName0,
+             progressStatisticCalculateOfPackageName1,
+             progressStatisticCalculateOfPackageName2,
+             progressStatisticCalculateOfPackageName3,
+             progressStatisticCalculateOfPackageName4,
+             progressStatisticCalculateOfPackageNameValue0,
+             progressStatisticCalculateOfPackageNameValue1,
+             progressStatisticCalculateOfPackageNameValue2,
+             progressStatisticCalculateOfPackageNameValue3,
+             progressStatisticCalculateOfPackageNameValue4,
+             progressStaticnName,
+             buatChart
+            } = this.state;
+
+
+
+      if (currentUser === null) {
+         return <Redirect to='/login'/>;
+      }
+
+
+
+
+
 // Card Chart 1
 const cardChartData1 = {
   labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
@@ -46,7 +294,7 @@ const cardChartData1 = {
       label: 'My First dataset',
       backgroundColor: brandPrimary,
       borderColor: 'rgba(255,255,255,.55)',
-      data: [65, 59, 84, 84, 51, 55, 40],
+      data: chartData1,
     },
   ],
 };
@@ -104,12 +352,11 @@ const cardChartData2 = {
       label: 'My First dataset',
       backgroundColor: brandInfo,
       borderColor: 'rgba(255,255,255,.55)',
-      data: [1, 18, 9, 17, 34, 22, 11],
+      data: chartData2,
     },
   ],
 };
 
-console.log(cardChartData2);
 
 const cardChartOpts2 = {
   tooltips: {
@@ -164,7 +411,7 @@ const cardChartData3 = {
       label: 'My First dataset',
       backgroundColor: 'rgba(255,255,255,.2)',
       borderColor: 'rgba(255,255,255,.55)',
-      data: [78, 81, 80, 45, 34, 12, 40],
+      data: chartData1,
     },
   ],
 };
@@ -202,13 +449,13 @@ const cardChartOpts3 = {
 
 // Card Chart 4
 const cardChartData4 = {
-  labels: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+  labels: ['', '', '', '', '', '', '', ''],
   datasets: [
     {
       label: 'My First dataset',
       backgroundColor: 'rgba(255,255,255,.3)',
       borderColor: 'transparent',
-      data: [78, 81, 80, 45, 34, 12, 40, 75, 34, 89, 32, 68, 54, 72, 18, 98],
+      data: chartData2,
       barPercentage: 0.6,
     },
   ],
@@ -235,87 +482,18 @@ const cardChartOpts4 = {
   },
 };
 
-// Social Box Chart
-const socialBoxData = [
-  { data: [65, 59, 84, 84, 51, 55, 40], label: 'facebook' },
-  { data: [1, 13, 9, 17, 34, 41, 38], label: 'twitter' },
-  { data: [78, 81, 80, 45, 34, 12, 40], label: 'linkedin' },
-  { data: [35, 23, 56, 22, 97, 23, 64], label: 'google' },
-];
 
-const makeSocialBoxData = (dataSetNo) => {
-  const dataset = socialBoxData[dataSetNo];
-  const data = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-    datasets: [
-      {
-        backgroundColor: 'rgba(255,255,255,.1)',
-        borderColor: 'rgba(255,255,255,.55)',
-        pointHoverBackgroundColor: '#fff',
-        borderWidth: 2,
-        data: dataset.data,
-        label: dataset.label,
-      },
-    ],
-  };
-  return () => data;
-};
 
-const socialChartOpts = {
-  tooltips: {
-    enabled: false,
-    custom: CustomTooltips
-  },
-  responsive: true,
-  maintainAspectRatio: false,
-  legend: {
-    display: false,
-  },
-  scales: {
-    xAxes: [
-      {
-        display: false,
-      }],
-    yAxes: [
-      {
-        display: false,
-      }],
-  },
-  elements: {
-    point: {
-      radius: 0,
-      hitRadius: 10,
-      hoverRadius: 4,
-      hoverBorderWidth: 3,
-    },
-  },
-};
 
 // sparkline charts
 const sparkLineChartData = [
   {
-    data: [35, 23, 56, 22, 97, 23, 64],
-    label: 'New Clients',
+    data: chartData1,
+    label: 'Biru',
   },
   {
-    data: [65, 59, 84, 84, 51, 55, 40],
-    label: 'Recurring Clients',
-  },
-  {
-    data: [35, 23, 56, 22, 97, 23, 64],
-    label: 'Pageviews',
-  },
-  {
-    data: [65, 59, 84, 84, 51, 55, 40],
-    label: 'Organic',
-  },
-  {
-    data: [78, 81, 80, 45, 34, 12, 40],
-    label: 'CTR',
-  },
-  {
-    data: [1, 13, 9, 17, 34, 41, 38],
-    label: 'Bounce Rate',
+    data: chartData2,
+    label: 'Merah',
   },
 ];
 
@@ -369,34 +547,33 @@ const sparklineChartOpts = {
 };
 
 
+this.state.buatChart.map((buatChart, key) => {
+  let tnr= buatChart.totalNotifReceived;
+  let tpo=buatChart.totalPushOffer;
+  
+  console.log(tnr)
+  console.log(tpo)
 
 
-
+         
+})
 
 
 // Main Chart
-
-//Random Numbers
-function random(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-}
+const x= chartTransactionDetails;
+console.log(x)
 
 var elements = 27;
-var data1 = [];
-var data2 = [];
-var data3 = [];
+var data1 = chartData1;
+var data2 = chartData2;
+var labels = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su', 'Mo'];
 
-for (var i = 0; i <= elements; i++) {
-  data1.push(random(50, 200));
-  data2.push(random(80, 100));
-  data3.push(65);
-}
 
 const mainChart = {
-  labels: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
+  labels: labels,
   datasets: [
     {
-      label: 'My First dataset',
+      label: 'data set pertama',
       backgroundColor: hexToRgba(brandInfo, 10),
       borderColor: brandInfo,
       pointHoverBackgroundColor: '#fff',
@@ -404,21 +581,12 @@ const mainChart = {
       data: data1,
     },
     {
-      label: 'My Second dataset',
+      label: 'data set kedua',
       backgroundColor: 'transparent',
       borderColor: brandSuccess,
       pointHoverBackgroundColor: '#fff',
       borderWidth: 2,
       data: data2,
-    },
-    {
-      label: 'My Third dataset',
-      backgroundColor: 'transparent',
-      borderColor: brandDanger,
-      pointHoverBackgroundColor: '#fff',
-      borderWidth: 1,
-      borderDash: [8, 5],
-      data: data3,
     },
   ],
 };
@@ -470,174 +638,10 @@ const mainChartOpts = {
 
 
 
-class Dashboard extends Component {
-  constructor(props) {
-    super(props);
-
-    this.toggle = this.toggle.bind(this);
-    this.onRadioBtnClick = this.onRadioBtnClick.bind(this);
-
-    this.state = {
-      currentUser: AuthService.getCurrentUser(),
-      dropdownOpen: false,
-      radioSelected: 2,
-      responseJson:[],
-      cardNotifReceived: [],
-      cardSentToScoring: [],
-      cardPushOffer: [],
-      cardTopupNotifReceived: [],
-      chartTransaction: [],
-      progressStatisticRepaid: [],
-      progressStatisticUnRepaid: []
-    };
-  }
-
-  toggle() {
-    this.setState({
-      dropdownOpen: !this.state.dropdownOpen,
-    });
-  }
-
-  onRadioBtnClick(radioSelected) {
-    this.setState({
-      radioSelected: radioSelected,
-    });
-  }
-  
-  loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>
+console.log(dataPackage)
 
 
 
-
-
-
-  componentDidMount() {
-    let user = JSON.parse(localStorage.getItem('user'));
-    console.log('token' + user.accessToken)
-    Promise.all([
-    fetch("http://localhost:8080/api/dashboard/dummy-notif-received", {
-       method: 'GET',
-       withCredentials: true,
-       headers:{
-                  Authorization: 'Bearer ' + user.accessToken,
-          },   
-        }),
-
-        fetch("http://localhost:8080/api/dashboard/dummy-sent-to-scoring", {
-       method: 'GET',
-       withCredentials: true,
-       headers:{
-                  Authorization: 'Bearer ' + user.accessToken,
-          },   
-        }),
-
-        fetch("http://localhost:8080/api/dashboard/dummy-push-offer", {
-       method: 'GET',
-       withCredentials: true,
-       headers:{
-                  Authorization: 'Bearer ' + user.accessToken,
-          },   
-        }),
-
-      fetch("http://localhost:8080/api/dashboard/dummy-topup-notif-received", {
-       method: 'GET',
-       withCredentials: true,
-       headers:{
-                  Authorization: 'Bearer ' + user.accessToken,
-          },   
-        }),
-
-        fetch("http://localhost:8080/api/dashboard/dummy-transactions", {
-          method: 'GET',
-          withCredentials: true,
-          headers:{
-                     Authorization: 'Bearer ' + user.accessToken,
-             },   
-           }),
-
-
-
-           fetch("http://localhost:8080/api/dashboard/dummy-statistics-and-packages", {
-            method: 'GET',
-            withCredentials: true,
-            headers:{
-                       Authorization: 'Bearer ' + user.accessToken,
-               },   
-             }),
-
-      ])
-        
-      //.then((res) => res.json())
-      .then(([res1, res2, res3, res4, res5, res6]) => Promise.all([res1.json(), res2.json(), res3.json(), res4.json(), res5.json(), res6.json()]))
-  
-
-
-//      .then((responseJson) => {
-//        console.log('object'+responseJson.data);
-
- //       const first = responseJson.data[0]
- //       console.log('card 1 ' + first.name.card1);
-//    })
-
-
- //   .then((responseJson) => {
- //     this.setState({
- //     currentUser: AuthService.getCurrentUser(),
- //     isLoading: false,
- //     data1: responseJson.data[0].dob.age,
- //     data2: responseJson.data[0].name.card1,
- //     data3: responseJson.data[0].cell
- //   });
- //     })
-
-
- .then(([data1, data2, data3, data4, data5, data6]) => this.setState({
-  currentUser: AuthService.getCurrentUser(),
-  isLoading: false,
-  cardNotifReceived: data1.data.totalNotifReceived, 
-  cardSentToScoring: data2.data.totalSentToScoring,
-  cardPushOffer: data3.data.totalPushOffer,
-  cardTopupNotifReceived: data4.data.totalTopUpNotifReceived,
-  chartTransactionOffersAccepted: data5.data.offersAccepted,
-  chartTransactionFullRepayment: data5.data.fullRepayment,
-  progresStaticAvailability: data6.data.serverAvailability,
-  progressAverageTPS: data6.data.averageTPS,
-  progressStatisticRepaid: data6.data.repaid,
-  progressStatisticUnRepaid: data6.data.unrepaid,
-  progressStatisticAverageOfPackages: data6.data.averageOfPackages[0].name,
-  progressStatisticCalculateOfPackage: data6.data.calculateOfPackages[0].value,
-  progressStaticnName: data6.data.calculateOfPackages[0].name
-
-}
-))
-    .catch((error) => {
-      console.error(error);
-      });
-
-
-  }
-
-
-    render () {
-      const {currentUser} = this.state;
-      const {cardNotifReceived, 
-             cardSentToScoring,
-             cardPushOffer,
-             cardTopupNotifReceived,
-             chartTransactionOffersAccepted,
-             chartTransactionFullRepayment,
-             progresStaticAvailability,
-             progressAverageTPS,
-             progressStatisticRepaid,
-             progressStatisticUnRepaid,
-             progressStatisticAverageOfPackages,
-             progressStatisticCalculateOfPackage,
-             progressStaticnName,
-            } = this.state;
-
-      if (currentUser === null) {
-         return <Redirect to='/login'/>;
-      }
 
 
       return (
@@ -646,19 +650,6 @@ class Dashboard extends Component {
             <Col xs="12" sm="6" lg="3">
               <Card className="text-white bg-info">
                 <CardBody className="pb-0">
-                  <ButtonGroup className="float-right">
-                    <ButtonDropdown id='card1' isOpen={this.state.card1} toggle={() => { this.setState({ card1: !this.state.card1 }); }}>
-                      <DropdownToggle caret className="p-0" color="transparent">
-                        <i className="icon-settings"></i>
-                      </DropdownToggle>
-                      <DropdownMenu right>
-                        <DropdownItem>Action</DropdownItem>
-                        <DropdownItem>Another action</DropdownItem>
-                        <DropdownItem disabled>Disabled action</DropdownItem>
-                        <DropdownItem>Something else here</DropdownItem>
-                      </DropdownMenu>
-                    </ButtonDropdown>
-                  </ButtonGroup>
                   <div className="text-value"> {cardNotifReceived}</div>
                   <div>Notifs Received</div>
                 </CardBody>
@@ -670,18 +661,6 @@ class Dashboard extends Component {
             <Col xs="12" sm="6" lg="3">
               <Card className="text-white bg-success">
                 <CardBody className="pb-0">
-                  <ButtonGroup className="float-right">
-                    <Dropdown id='card2' isOpen={this.state.card2} toggle={() => { this.setState({ card2: !this.state.card2 }); }}>
-                      <DropdownToggle className="p-0" color="transparent">
-                        <i className="icon-location-pin"></i>
-                      </DropdownToggle>
-                      <DropdownMenu right>
-                        <DropdownItem>Action</DropdownItem>
-                        <DropdownItem>Another action</DropdownItem>
-                        <DropdownItem>Something else here</DropdownItem>
-                      </DropdownMenu>
-                    </Dropdown>
-                  </ButtonGroup>
                   <div className="text-value"> {cardSentToScoring}</div>
                   <div>Sent to Scoring</div>
                 </CardBody>
@@ -694,18 +673,6 @@ class Dashboard extends Component {
             <Col xs="12" sm="6" lg="3">
               <Card className="text-white bg-warning">
                 <CardBody className="pb-0">
-                  <ButtonGroup className="float-right">
-                    <Dropdown id='card3' isOpen={this.state.card3} toggle={() => { this.setState({ card3: !this.state.card3 }); }}>
-                      <DropdownToggle caret className="p-0" color="transparent">
-                        <i className="icon-settings"></i>
-                      </DropdownToggle>
-                      <DropdownMenu right>
-                        <DropdownItem>Action</DropdownItem>
-                        <DropdownItem>Another action</DropdownItem>
-                        <DropdownItem>Something else here</DropdownItem>
-                      </DropdownMenu>
-                    </Dropdown>
-                  </ButtonGroup>
                   <div className="text-value"> {cardPushOffer}</div>
                   <div>Push Offer
                   {/*<strong>{currentUser.username}</strong>*/}
@@ -721,18 +688,6 @@ class Dashboard extends Component {
             <Col xs="12" sm="6" lg="3">
               <Card className="text-white bg-danger">
                 <CardBody className="pb-0">
-                  <ButtonGroup className="float-right">
-                    <ButtonDropdown id='card4' isOpen={this.state.card4} toggle={() => { this.setState({ card4: !this.state.card4 }); }}>
-                      <DropdownToggle caret className="p-0" color="transparent">
-                        <i className="icon-settings"></i>
-                      </DropdownToggle>
-                      <DropdownMenu right>
-                        <DropdownItem>Action</DropdownItem>
-                        <DropdownItem>Another action</DropdownItem>
-                        <DropdownItem>Something else here</DropdownItem>
-                      </DropdownMenu>
-                    </ButtonDropdown>
-                  </ButtonGroup>
                   <div className="text-value"> {cardTopupNotifReceived}</div>
                   <div>Topup Notifs Received</div>
                 </CardBody>
@@ -743,11 +698,6 @@ class Dashboard extends Component {
             </Col>
           </Row>
 
-        
-
-
-
-
 
     <Row>
       <Col>
@@ -756,15 +706,12 @@ class Dashboard extends Component {
             <Row>
               <Col sm="5">
                 <CardTitle className="mb-0">Transactions</CardTitle>
-                <div className="small text-muted">June 2020</div>
+      <div className="small text-muted">{transactionDate}</div>
               </Col>
               <Col sm="7" className="d-none d-sm-inline-block">
                 <Button color="primary" className="float-right"><i className="icon-cloud-download"></i></Button>
                 <ButtonToolbar className="float-right" aria-label="Toolbar with button groups">
                   <ButtonGroup className="mr-3" aria-label="First group">
-                    <Button color="outline-secondary" onClick={() => this.onRadioBtnClick(1)} active={this.state.radioSelected === 1}>Day</Button>
-                    <Button color="outline-secondary" onClick={() => this.onRadioBtnClick(2)} active={this.state.radioSelected === 2}>Month</Button>
-                    <Button color="outline-secondary" onClick={() => this.onRadioBtnClick(3)} active={this.state.radioSelected === 3}>Year</Button>
                   </ButtonGroup>
                 </ButtonToolbar>
               </Col>
@@ -792,6 +739,12 @@ class Dashboard extends Component {
         </Card>
       </Col>
     </Row>
+
+
+
+
+
+
 
     <Row>
       <Col>
@@ -828,57 +781,57 @@ class Dashboard extends Component {
                 <div className="progress-group mb-4">
                   <div className="progress-group-prepend">
                     <span className="progress-group-text">
-                      IDR 5k Package
+                    {progressStatisticAverageOfPackages0}
                     </span>
                   </div>
                   <div className="progress-group-bars">
-                    <Progress className="progress-xs" color="info" value={progressStatisticUnRepaid} />
-                    <Progress className="progress-xs" color="danger" value={progressStatisticUnRepaid} />
+                    <Progress className="progress-xs" color="info" value={String( progressStatisticAverageOfPackagesAO)} />
+                    <Progress className="progress-xs" color="danger" value={String( progressStatisticAverageOfPackagesRO)}/>
                   </div>
                 </div>
                 <div className="progress-group mb-4">
                   <div className="progress-group-prepend">
                     <span className="progress-group-text">
-                    {progressStatisticAverageOfPackages}
+                    {progressStatisticAverageOfPackages1}
                     </span>
                   </div>
                   <div className="progress-group-bars">
-                    <Progress className="progress-xs" color="info" value={progressStatisticRepaid} />
-                    <Progress className="progress-xs" color="danger" value={progressStatisticRepaid} />
+                    <Progress className="progress-xs" color="info" value={String( progressStatisticAverageOfPackagesAO1)} />
+                    <Progress className="progress-xs" color="danger" value={String( progressStatisticAverageOfPackagesRO1)} />
                   </div>
                 </div>
                 <div className="progress-group mb-4">
                   <div className="progress-group-prepend">
                     <span className="progress-group-text">
-                    {progressStatisticAverageOfPackages}
+                    {progressStatisticAverageOfPackages2}
                     </span>
                   </div>
                   <div className="progress-group-bars">
-                    <Progress className="progress-xs" color="info" value={progressStatisticRepaid} />
-                    <Progress className="progress-xs" color="danger" value={progressStatisticRepaid} />
+                    <Progress className="progress-xs" color="info" value={String(progressStatisticAverageOfPackagesAO2)}/>
+                    <Progress className="progress-xs" color="danger" value={String(progressStatisticAverageOfPackagesRO2)} />
                   </div>
                 </div>
                 <div className="progress-group mb-4">
                   <div className="progress-group-prepend">
                     <span className="progress-group-text">
-                    {progressStatisticAverageOfPackages}
+                    {progressStatisticAverageOfPackages3}
                     </span>
                   </div>
                   <div className="progress-group-bars">
-                    <Progress className="progress-xs" color="info" value={progressStatisticRepaid} />
-                    <Progress className="progress-xs" color="danger" value={progressStatisticRepaid} />
+                    <Progress className="progress-xs" color="info" value={String(progressStatisticAverageOfPackagesAO3)} />
+                    <Progress className="progress-xs" color="danger" value={String(progressStatisticAverageOfPackagesRO3)}/>
                   </div>
                 </div>
                 <div className="progress-group mb-4">
                   <div className="progress-group-prepend">
                     <span className="progress-group-text">
-                    {progressStatisticAverageOfPackages}
+                    {progressStatisticAverageOfPackages4}
                     </span>
                   </div>
                  
                   <div className="progress-group-bars">
-                    <Progress className="progress-xs" color="info" value={progressStatisticRepaid} />
-                    <Progress className="progress-xs" color="danger" value={progressStatisticRepaid}/>
+                    <Progress className="progress-xs" color="info" value={String(progressStatisticAverageOfPackagesAO4)} />
+                    <Progress className="progress-xs" color="danger" value={String(progressStatisticAverageOfPackagesAO4)}/>
                   </div>
                 </div>
                 <div className="legend text-center">
@@ -902,7 +855,7 @@ class Dashboard extends Component {
       <span className="ml-auto font-weight-bold">{progressStatisticRepaid}%</span>
                     </div>
                     <div className="progress-group-bars">
-                      <Progress className="progress-xs" color="warning" value={progressStatisticRepaid} />
+                      <Progress className="progress-xs" color="warning" value={String(progressStatisticRepaid)}/>
                     </div>
                   </div>
                   <div className="progress-group mb-5">
@@ -912,58 +865,62 @@ class Dashboard extends Component {
       <span className="ml-auto font-weight-bold">{progressStatisticUnRepaid}%</span>
                     </div>
                     <div className="progress-group-bars">
-                      <Progress className="progress-xs" color="warning" value={progressStatisticUnRepaid} />
+                      <Progress className="progress-xs" color="warning" value={String(progressStatisticUnRepaid)} />
+                    </div>
+                  </div>
+
+
+
+
+                  <div className="progress-group">
+                    <div className="progress-group-header">
+                      <i className="cui-info progress-group-icon"></i>
+                <span className="title">{progressStatisticCalculateOfPackageName0}</span>
+                <span className="ml-auto font-weight-bold">{progressStatisticCalculateOfPackageNameValue0} <span className="text-muted small">(56%)</span></span>
+                    </div>
+                    <div className="progress-group-bars">
+                      <Progress className="progress-xs" color="success"value={String(progressStatisticCalculateOfPackageNameValue0)} />
                     </div>
                   </div>
                   <div className="progress-group">
                     <div className="progress-group-header">
                       <i className="cui-info progress-group-icon"></i>
-      <span className="title">{progressStaticnName}</span>
-      <span className="ml-auto font-weight-bold">{progressStatisticCalculateOfPackage} <span className="text-muted small">(56%)</span></span>
+                      <span className="title">{progressStatisticCalculateOfPackageName1}</span>
+                      <span className="ml-auto font-weight-bold">{progressStatisticCalculateOfPackageNameValue1}  <span className="text-muted small">(15%)</span></span>
                     </div>
                     <div className="progress-group-bars">
-                      <Progress className="progress-xs" color="success"value={progressStatisticRepaid} />
+                      <Progress className="progress-xs" color="success" value={String(progressStatisticCalculateOfPackageNameValue1)} />
                     </div>
                   </div>
                   <div className="progress-group">
                     <div className="progress-group-header">
                       <i className="cui-info progress-group-icon"></i>
-                      <span className="title">{progressStaticnName}</span>
-                      <span className="ml-auto font-weight-bold">{progressStatisticCalculateOfPackage}  <span className="text-muted small">(15%)</span></span>
+                      <span className="title">{progressStatisticCalculateOfPackageName2}</span>
+                      <span className="ml-auto font-weight-bold">{progressStatisticCalculateOfPackageNameValue2}  <span className="text-muted small">(11%)</span></span>
                     </div>
                     <div className="progress-group-bars">
-                      <Progress className="progress-xs" color="success" value={progressStatisticRepaid} />
+                      <Progress className="progress-xs" color="success" value={String(progressStatisticCalculateOfPackageNameValue2)} />
                     </div>
                   </div>
                   <div className="progress-group">
                     <div className="progress-group-header">
                       <i className="cui-info progress-group-icon"></i>
-                      <span className="title">{progressStaticnName}</span>
-                      <span className="ml-auto font-weight-bold">{progressStatisticCalculateOfPackage}  <span className="text-muted small">(11%)</span></span>
+                      <span className="title">{progressStatisticCalculateOfPackageName3}</span>
+                      <span className="ml-auto font-weight-bold">{progressStatisticCalculateOfPackageNameValue3}  <span className="text-muted small">(8%)</span></span>
                     </div>
                     <div className="progress-group-bars">
-                      <Progress className="progress-xs" color="success" value={progressStatisticRepaid} />
-                    </div>
-                  </div>
-                  <div className="progress-group">
-                    <div className="progress-group-header">
-                      <i className="cui-info progress-group-icon"></i>
-                      <span className="title">{progressStaticnName}</span>
-                      <span className="ml-auto font-weight-bold">{progressStatisticCalculateOfPackage}  <span className="text-muted small">(8%)</span></span>
-                    </div>
-                    <div className="progress-group-bars">
-                      <Progress className="progress-xs" color="success" value={progressStatisticRepaid} />
+                      <Progress className="progress-xs" color="success" value={String(progressStatisticCalculateOfPackageNameValue3)} />
                     </div>
                   </div>
 
                   <div className="progress-group">
                     <div className="progress-group-header">
                       <i className="cui-info progress-group-icon"></i>
-                      <span className="title">{progressStaticnName}</span>
-                      <span className="ml-auto font-weight-bold">{progressStatisticCalculateOfPackage} <span className="text-muted small">(4%)</span></span>
+                      <span className="title">{progressStatisticCalculateOfPackageName4}</span>
+                      <span className="ml-auto font-weight-bold">{progressStatisticCalculateOfPackageNameValue4} <span className="text-muted small">(4%)</span></span>
                     </div>
                     <div className="progress-group-bars">
-                      <Progress className="progress-xs" color="success" value={progressStatisticRepaid} />
+                      <Progress className="progress-xs" color="success" value={String(progressStatisticCalculateOfPackageNameValue4)}/>
                     </div>
                   </div>
 
@@ -975,223 +932,39 @@ class Dashboard extends Component {
               </Col>
             </Row>
 
+  {/* table */}
+  <br />
+  <Table hover responsive className="table-outline mb-0 d-none d-sm-table">
+<thead className="thead-light">
+<tr>
+  <th>Package</th>
+  <th className="text-center">Type</th>
+  <th>Usage</th>
+  <th className="text-center">Threshold</th>
+  <th>Status</th>
+</tr>
+</thead>
+<tbody>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            <br />
-            <Table hover responsive className="table-outline mb-0 d-none d-sm-table">
-              <thead className="thead-light">
-              <tr>
-                <th>Package</th>
-                <th className="text-center">Type</th>
-                <th>Usage</th>
-                <th className="text-center">Threshold</th>
-                <th>Status</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr>
-                
-                <td>
-                  <div>IDR 5k Package</div>
-                  <div className="small text-muted">
-                    <span>New</span> | Registered: Jan 1, 2020
-                  </div>
-                </td>
-                <td className="text-center">
-                Balance
-                </td>
-                <td>
-                  <div className="clearfix">
-                    <div className="float-left">
-                      <strong>50%</strong>
-                    </div>
-                    <div className="float-right">
-                      <small className="text-muted">Jun 11, 2020 - Jul 10, 2020</small>
-                    </div>
-                  </div>
-                  <Progress className="progress-xs" color="success" value={progressStatisticRepaid} />
-                </td>
-                <td className="text-center">
-                IDR 10k Balance
-                </td>
-                <td>
-                  <div className="small text-muted">Last login</div>
-                  <strong>10 sec ago</strong>
-                </td>
-              </tr>
-              <tr>
-               
-                <td>
-                  <div>IDR 5k Package</div>
-                  <div className="small text-muted">
-
-                    <span>Recurring</span> | Registered: Jan 1, 2020
-                  </div>
-                </td>
-                <td className="text-center">
-                Balance
-                </td>
-                <td>
-                  <div className="clearfix">
-                    <div className="float-left">
-                      <strong>10%</strong>
-                    </div>
-                    <div className="float-right">
-                      <small className="text-muted">Jun 11, 2020 - Jul 10, 2020</small>
-                    </div>
-                  </div>
-                  <Progress className="progress-xs" color="info" value={progressStatisticRepaid} />
-                </td>
-                <td className="text-center">
-                IDR 10k Balance
-                </td>
-                <td>
-                  <div className="small text-muted">Last login</div>
-                  <strong>5 minutes ago</strong>
-                </td>
-              </tr>
-              <tr>
-               
-                <td>
-                  <div>IDR 5k Package</div>
-                  <div className="small text-muted">
-                    <span>New</span> | Registered: Jan 1, 2020
-                  </div>
-                </td>
-                <td className="text-center">
-                Balance
-                </td>
-                <td>
-                  <div className="clearfix">
-                    <div className="float-left">
-                      <strong>74%</strong>
-                    </div>
-                    <div className="float-right">
-                      <small className="text-muted">Jun 11, 2020 - Jul 10, 2020</small>
-                    </div>
-                  </div>
-                  <Progress className="progress-xs" color="warning" value={progressStatisticRepaid} />
-                </td>
-                <td className="text-center">
-                IDR 10k Balance
-                </td>
-                <td>
-                  <div className="small text-muted">Last login</div>
-                  <strong>1 hour ago</strong>
-                </td>
-              </tr>
-              <tr>
-             
-                <td>
-                  <div>IDR 5k Package</div>
-                  <div className="small text-muted">
-                    <span>New</span> | Registered: Jan 1, 2020
-                  </div>
-                </td>
-                <td className="text-center">
-                Balance
-                </td>
-                <td>
-                  <div className="clearfix">
-                    <div className="float-left">
-                      <strong>98%</strong>
-                    </div>
-                    <div className="float-right">
-                      <small className="text-muted">Jun 11, 2020 - Jul 10, 2020</small>
-                    </div>
-                  </div>
-                  <Progress className="progress-xs" color="danger" value={progressStatisticRepaid} />
-                </td>
-                <td className="text-center">
-                IDR 10k Balance
-                </td>
-                <td>
-                  <div className="small text-muted">Last login</div>
-                  <strong>Last month</strong>
-                </td>
-              </tr>
-              <tr>
-                
-                <td>
-                  <div>IDR 5k Package</div>
-                  <div className="small text-muted">
-                    <span>New</span> | Registered: Jan 1, 2020
-                  </div>
-                </td>
-                <td className="text-center">
-                Balance
-                </td>
-                <td>
-                  <div className="clearfix">
-                    <div className="float-left">
-                      <strong>22%</strong>
-                    </div>
-                    <div className="float-right">
-                      <small className="text-muted">Jun 11, 2020 - Jul 10, 2020</small>
-                    </div>
-                  </div>
-                  <Progress className="progress-xs" color="info" value={progressStatisticRepaid} />
-                </td>
-                <td className="text-center">
-                IDR 10k Balance
-                </td>
-                <td>
-                  <div className="small text-muted">Last login</div>
-                  <strong>Last week</strong>
-                </td>
-              </tr>
-              <tr>
-                
-                <td>
-                  <div>IDR 5k Package</div>
-                  <div className="small text-muted">
-                    <span>New</span> | Registered: Jan 1, 2020
-                  </div>
-                </td>
-                <td className="text-center">
-                  Balance
-                </td>
-                <td>
-                  <div className="clearfix">
-                    <div className="float-left">
-                      <strong>43%</strong>
-                    </div>
-                    <div className="float-right">
-                      <small className="text-muted">Jun 11, 2020 - Jul 10, 2020</small>
-                    </div>
-                  </div>
-                  <Progress className="progress-xs" color="success" value={progressStatisticRepaid} />
-                </td>
-                <td className="text-center">
-                IDR 10k Balance
-                </td>
-                <td>
-                  <div className="small text-muted">Last login</div>
-                  <strong>Yesterday</strong>
-                </td>
-              </tr>
-              </tbody>
-            </Table>
+    {this.state.data.map((data, key) => {
+  return <List namex={data.pack.name}
+               statusx={data.pack.status} 
+               startDatex={data.pack.startDate} 
+               typex={data.type}
+               usagex={data.usage}
+               usageDatex={data.usageDate}
+               thresholdx={data.threshold}
+               statusx={data.status}
+         />
+})}
+          
+          </tbody>
+</Table>      
           </CardBody>
         </Card>
       </Col>
     </Row>
-      
+  
         </div>
         
       );
