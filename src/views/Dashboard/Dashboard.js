@@ -85,7 +85,7 @@ class Dashboard extends Component {
     console.log('token' + user.accessToken)
 
     Promise.all([
-    fetch("http://178.128.222.35:9100/loan-engine-web-services/api/dashboard/dummy-notif-received", {
+    fetch("http://localhost:8080/api/dashboard/dummy-notif-received", {
        method: 'GET',
        withCredentials: true,
        headers:{
@@ -93,7 +93,7 @@ class Dashboard extends Component {
           },   
         }),
 
-        fetch("http://178.128.222.35:9100/loan-engine-web-services/api/dashboard/dummy-sent-to-scoring", {
+        fetch("http://localhost:8080/api/dashboard/dummy-sent-to-scoring", {
        method: 'GET',
        withCredentials: true,
        headers:{
@@ -101,7 +101,7 @@ class Dashboard extends Component {
           },   
         }),
 
-        fetch("http://178.128.222.35:9100/loan-engine-web-services/api/dashboard/dummy-push-offer", {
+        fetch("http://localhost:8080/api/dashboard/dummy-push-offer", {
        method: 'GET',
        withCredentials: true,
        headers:{
@@ -109,7 +109,7 @@ class Dashboard extends Component {
           },   
         }),
 
-      fetch("http://178.128.222.35:9100/loan-engine-web-services/api/dashboard/dummy-topup-notif-received", {
+      fetch("http://localhost:8080/api/dashboard/dummy-topup-notif-received", {
        method: 'GET',
        withCredentials: true,
        headers:{
@@ -117,7 +117,7 @@ class Dashboard extends Component {
           },   
         }),
 
-        fetch("http://178.128.222.35:9100/loan-engine-web-services/api/dashboard/dummy-transactions", {
+        fetch("http://localhost:8080/api/dashboard/dummy-transactions", {
           method: 'GET',
           withCredentials: true,
           headers:{
@@ -127,7 +127,7 @@ class Dashboard extends Component {
 
 
 
-           fetch("http://178.128.222.35:9100/loan-engine-web-services/api/dashboard/dummy-statistics-and-packages", {
+           fetch("http://localhost:8080/api/dashboard/dummy-statistics-and-packages", {
             method: 'GET',
             withCredentials: true,
             headers:{
@@ -156,17 +156,180 @@ class Dashboard extends Component {
   isLoading: false,
 
   //cardData
+
+
+  //card1
   cardNotifReceived: data1.data.totalNotifReceived, 
+  cardNotifReceivedChartData0V: data1.data.notifReceivedWeeklys[0].value,
+  cardNotifReceivedChartData1V: data1.data.notifReceivedWeeklys[1].value,
+  cardNotifReceivedChartData2V: data1.data.notifReceivedWeeklys[2].value,
+  cardNotifReceivedChartData3V: data1.data.notifReceivedWeeklys[3].value,
+  cardNotifReceivedChartData4V: data1.data.notifReceivedWeeklys[4].value,
+  cardNotifReceivedChartData5V: data1.data.notifReceivedWeeklys[5].value,
+  
+  cardNotifReceivedChartData0W: data1.data.notifReceivedWeeklys[0].week,
+  cardNotifReceivedChartData1W: data1.data.notifReceivedWeeklys[1].week,
+  cardNotifReceivedChartData2W: data1.data.notifReceivedWeeklys[2].week,
+  cardNotifReceivedChartData3W: data1.data.notifReceivedWeeklys[3].week,
+  cardNotifReceivedChartData4W: data1.data.notifReceivedWeeklys[4].week,
+  cardNotifReceivedChartData5W: data1.data.notifReceivedWeeklys[5].week,
+
+
+  //card2
   cardSentToScoring: data2.data.totalSentToScoring,
+  cardSentToScoringChartData0V: data2.data.sentToScoringWeeklys[0].value,
+  cardSentToScoringChartData1V: data2.data.sentToScoringWeeklys[1].value,
+  cardSentToScoringChartData2V: data2.data.sentToScoringWeeklys[2].value,
+  cardSentToScoringChartData3V: data2.data.sentToScoringWeeklys[3].value,
+  cardSentToScoringChartData4V: data2.data.sentToScoringWeeklys[4].value,
+  cardSentToScoringChartData5V: data2.data.sentToScoringWeeklys[5].value,
+
+  cardSentToScoringChartData0W: data2.data.sentToScoringWeeklys[0].week,
+  cardSentToScoringChartData1W: data2.data.sentToScoringWeeklys[1].week,
+  cardSentToScoringChartData2W: data2.data.sentToScoringWeeklys[2].week,
+  cardSentToScoringChartData3W: data2.data.sentToScoringWeeklys[3].week,
+  cardSentToScoringChartData4W: data2.data.sentToScoringWeeklys[4].week,
+  cardSentToScoringChartData5W: data2.data.sentToScoringWeeklys[5].week,
+
+
+  //card3
   cardPushOffer: data3.data.totalPushOffer,
+  cardPushOfferChartData0V: data3.data.pushOfferWeeklys[0].value,
+  cardPushOfferChartData1V: data3.data.pushOfferWeeklys[1].value,
+  cardPushOfferChartData2V: data3.data.pushOfferWeeklys[2].value,
+  cardPushOfferChartData3V: data3.data.pushOfferWeeklys[3].value,
+  cardPushOfferChartData4V: data3.data.pushOfferWeeklys[4].value,
+  cardPushOfferChartData5V: data3.data.pushOfferWeeklys[5].value,
+
+  cardPushOfferChartData0W: data3.data.pushOfferWeeklys[0].week,
+  cardPushOfferChartData1W: data3.data.pushOfferWeeklys[1].week,
+  cardPushOfferChartData2W: data3.data.pushOfferWeeklys[2].week,
+  cardPushOfferChartData3W: data3.data.pushOfferWeeklys[3].week,
+  cardPushOfferChartData4W: data3.data.pushOfferWeeklys[4].week,
+  cardPushOfferChartData5W: data3.data.pushOfferWeeklys[5].week,
+
+
+
+  //card4
   cardTopupNotifReceived: data4.data.totalTopUpNotifReceived,
+  cardTopupNotifReceivedChartData0V: data4.data.topUpNotifReceivedWeeklys[0].value,
+  cardTopupNotifReceivedChartData1V: data4.data.topUpNotifReceivedWeeklys[1].value,
+  cardTopupNotifReceivedChartData2V: data4.data.topUpNotifReceivedWeeklys[2].value,
+  cardTopupNotifReceivedChartData3V: data4.data.topUpNotifReceivedWeeklys[3].value,
+  cardTopupNotifReceivedChartData4V: data4.data.topUpNotifReceivedWeeklys[4].value,
+  cardTopupNotifReceivedChartData5V: data4.data.topUpNotifReceivedWeeklys[5].value,
+
+  cardTopupNotifReceivedChartData0W: data4.data.topUpNotifReceivedWeeklys[0].week,
+  cardTopupNotifReceivedChartData1W: data4.data.topUpNotifReceivedWeeklys[1].week,
+  cardTopupNotifReceivedChartData2W: data4.data.topUpNotifReceivedWeeklys[2].week,
+  cardTopupNotifReceivedChartData3W: data4.data.topUpNotifReceivedWeeklys[3].week,
+  cardTopupNotifReceivedChartData4W: data4.data.topUpNotifReceivedWeeklys[4].week,
+  cardTopupNotifReceivedChartData5W: data4.data.topUpNotifReceivedWeeklys[5].week,
+
 
   //detail chart data
   transactionDate: data5.data.transactionDate,
 
   //chart data
-  chartTransactionDetails: data5.data.transactionsDetails,
-  buatChart: data5.data.transactionsDetails,
+  chartTransactionDetailsTotalNotifReceived0: data5.data.transactionsDetails[0].totalNotifReceived,
+  chartTransactionDetailsTotalNotifReceived1: data5.data.transactionsDetails[1].totalNotifReceived,
+  chartTransactionDetailsTotalNotifReceived2: data5.data.transactionsDetails[2].totalNotifReceived,
+  chartTransactionDetailsTotalNotifReceived3: data5.data.transactionsDetails[3].totalNotifReceived,
+  chartTransactionDetailsTotalNotifReceived4: data5.data.transactionsDetails[4].totalNotifReceived,
+  chartTransactionDetailsTotalNotifReceived5: data5.data.transactionsDetails[5].totalNotifReceived,
+  chartTransactionDetailsTotalNotifReceived6: data5.data.transactionsDetails[6].totalNotifReceived,
+  chartTransactionDetailsTotalNotifReceived7: data5.data.transactionsDetails[7].totalNotifReceived,
+  chartTransactionDetailsTotalNotifReceived8: data5.data.transactionsDetails[8].totalNotifReceived,
+  chartTransactionDetailsTotalNotifReceived9: data5.data.transactionsDetails[9].totalNotifReceived,
+  chartTransactionDetailsTotalNotifReceived10: data5.data.transactionsDetails[10].totalNotifReceived,
+  chartTransactionDetailsTotalNotifReceived11: data5.data.transactionsDetails[11].totalNotifReceived,
+  chartTransactionDetailsTotalNotifReceived12: data5.data.transactionsDetails[12].totalNotifReceived,
+  chartTransactionDetailsTotalNotifReceived13: data5.data.transactionsDetails[13].totalNotifReceived,
+  chartTransactionDetailsTotalNotifReceived14: data5.data.transactionsDetails[14].totalNotifReceived,
+  chartTransactionDetailsTotalNotifReceived15: data5.data.transactionsDetails[15].totalNotifReceived,
+  chartTransactionDetailsTotalNotifReceived16: data5.data.transactionsDetails[16].totalNotifReceived,
+  chartTransactionDetailsTotalNotifReceived17: data5.data.transactionsDetails[17].totalNotifReceived,
+  chartTransactionDetailsTotalNotifReceived18: data5.data.transactionsDetails[18].totalNotifReceived,
+  chartTransactionDetailsTotalNotifReceived19: data5.data.transactionsDetails[19].totalNotifReceived,
+  chartTransactionDetailsTotalNotifReceived20: data5.data.transactionsDetails[20].totalNotifReceived,
+  chartTransactionDetailsTotalNotifReceived21: data5.data.transactionsDetails[21].totalNotifReceived,
+  chartTransactionDetailsTotalNotifReceived22: data5.data.transactionsDetails[22].totalNotifReceived,
+  chartTransactionDetailsTotalNotifReceived23: data5.data.transactionsDetails[23].totalNotifReceived,
+  chartTransactionDetailsTotalNotifReceived24: data5.data.transactionsDetails[24].totalNotifReceived,
+  chartTransactionDetailsTotalNotifReceived25: data5.data.transactionsDetails[25].totalNotifReceived,
+  chartTransactionDetailsTotalNotifReceived26: data5.data.transactionsDetails[26].totalNotifReceived,
+  chartTransactionDetailsTotalNotifReceived27: data5.data.transactionsDetails[27].totalNotifReceived,
+  chartTransactionDetailsTotalNotifReceived28: data5.data.transactionsDetails[28].totalNotifReceived,
+  chartTransactionDetailsTotalNotifReceived29: data5.data.transactionsDetails[29].totalNotifReceived,
+  chartTransactionDetailsTotalNotifReceived30: data5.data.transactionsDetails[30].totalNotifReceived,
+
+
+  chartTransactionDetailsTotalPushOffer0: data5.data.transactionsDetails[0].totalPushOffer,
+  chartTransactionDetailsTotalPushOffer1: data5.data.transactionsDetails[1].totalPushOffer,
+  chartTransactionDetailsTotalPushOffer2: data5.data.transactionsDetails[2].totalPushOffer,
+  chartTransactionDetailsTotalPushOffer3: data5.data.transactionsDetails[3].totalPushOffer,
+  chartTransactionDetailsTotalPushOffer4: data5.data.transactionsDetails[4].totalPushOffer,
+  chartTransactionDetailsTotalPushOffer5: data5.data.transactionsDetails[5].totalPushOffer,
+  chartTransactionDetailsTotalPushOffer6: data5.data.transactionsDetails[6].totalPushOffer,
+  chartTransactionDetailsTotalPushOffer7: data5.data.transactionsDetails[7].totalPushOffer,
+  chartTransactionDetailsTotalPushOffer8: data5.data.transactionsDetails[8].totalPushOffer,
+  chartTransactionDetailsTotalPushOffer9: data5.data.transactionsDetails[9].totalPushOffer,
+  chartTransactionDetailsTotalPushOffer10: data5.data.transactionsDetails[10].totalPushOffer,
+  chartTransactionDetailsTotalPushOffer11: data5.data.transactionsDetails[11].totalPushOffer,
+  chartTransactionDetailsTotalPushOffer12: data5.data.transactionsDetails[12].totalPushOffer,
+  chartTransactionDetailsTotalPushOffer13: data5.data.transactionsDetails[13].totalPushOffer,
+  chartTransactionDetailsTotalPushOffer14: data5.data.transactionsDetails[14].totalPushOffer,
+  chartTransactionDetailsTotalPushOffer15: data5.data.transactionsDetails[15].totalPushOffer,
+  chartTransactionDetailsTotalPushOffer16: data5.data.transactionsDetails[16].totalPushOffer,
+  chartTransactionDetailsTotalPushOffer17: data5.data.transactionsDetails[17].totalPushOffer,
+  chartTransactionDetailsTotalPushOffer18: data5.data.transactionsDetails[18].totalPushOffer,
+  chartTransactionDetailsTotalPushOffer19: data5.data.transactionsDetails[19].totalPushOffer,
+  chartTransactionDetailsTotalPushOffer20: data5.data.transactionsDetails[20].totalPushOffer,
+  chartTransactionDetailsTotalPushOffer21: data5.data.transactionsDetails[21].totalPushOffer,
+  chartTransactionDetailsTotalPushOffer22: data5.data.transactionsDetails[22].totalPushOffer,
+  chartTransactionDetailsTotalPushOffer23: data5.data.transactionsDetails[23].totalPushOffer,
+  chartTransactionDetailsTotalPushOffer24: data5.data.transactionsDetails[24].totalPushOffer,
+  chartTransactionDetailsTotalPushOffer25: data5.data.transactionsDetails[25].totalPushOffer,
+  chartTransactionDetailsTotalPushOffer26: data5.data.transactionsDetails[26].totalPushOffer,
+  chartTransactionDetailsTotalPushOffer27: data5.data.transactionsDetails[27].totalPushOffer,
+  chartTransactionDetailsTotalPushOffer28: data5.data.transactionsDetails[28].totalPushOffer,
+  chartTransactionDetailsTotalPushOffer29: data5.data.transactionsDetails[29].totalPushOffer,
+  chartTransactionDetailsTotalPushOffer30: data5.data.transactionsDetails[30].totalPushOffer,
+
+
+
+  chartTransactionDetailsTotalTopUpNotifReceived0: data5.data.transactionsDetails[0].totalTopUpNotifReceived,
+  chartTransactionDetailsTotalTopUpNotifReceived1: data5.data.transactionsDetails[1].totalTopUpNotifReceived,
+  chartTransactionDetailsTotalTopUpNotifReceived2: data5.data.transactionsDetails[2].totalTopUpNotifReceived,
+  chartTransactionDetailsTotalTopUpNotifReceived3: data5.data.transactionsDetails[3].totalTopUpNotifReceived,
+  chartTransactionDetailsTotalTopUpNotifReceived4: data5.data.transactionsDetails[4].totalTopUpNotifReceived,
+  chartTransactionDetailsTotalTopUpNotifReceived5: data5.data.transactionsDetails[5].totalTopUpNotifReceived,
+  chartTransactionDetailsTotalTopUpNotifReceived6: data5.data.transactionsDetails[6].totalTopUpNotifReceived,
+  chartTransactionDetailsTotalTopUpNotifReceived7: data5.data.transactionsDetails[7].totalTopUpNotifReceived,
+  chartTransactionDetailsTotalTopUpNotifReceived8: data5.data.transactionsDetails[8].totalTopUpNotifReceived,
+  chartTransactionDetailsTotalTopUpNotifReceived9: data5.data.transactionsDetails[9].totalTopUpNotifReceived,
+  chartTransactionDetailsTotalTopUpNotifReceived10: data5.data.transactionsDetails[10].totalTopUpNotifReceived,
+  chartTransactionDetailsTotalTopUpNotifReceived11: data5.data.transactionsDetails[11].totalTopUpNotifReceived,
+  chartTransactionDetailsTotalTopUpNotifReceived12: data5.data.transactionsDetails[12].totalTopUpNotifReceived,
+  chartTransactionDetailsTotalTopUpNotifReceived13: data5.data.transactionsDetails[13].totalTopUpNotifReceived,
+  chartTransactionDetailsTotalTopUpNotifReceived14: data5.data.transactionsDetails[14].totalTopUpNotifReceived,
+  chartTransactionDetailsTotalTopUpNotifReceived15: data5.data.transactionsDetails[15].totalTopUpNotifReceived,
+  chartTransactionDetailsTotalTopUpNotifReceived16: data5.data.transactionsDetails[16].totalTopUpNotifReceived,
+  chartTransactionDetailsTotalTopUpNotifReceived17: data5.data.transactionsDetails[17].totalTopUpNotifReceived,
+  chartTransactionDetailsTotalTopUpNotifReceived18: data5.data.transactionsDetails[18].totalTopUpNotifReceived,
+  chartTransactionDetailsTotalTopUpNotifReceived19: data5.data.transactionsDetails[19].totalTopUpNotifReceived,
+  chartTransactionDetailsTotalTopUpNotifReceived20: data5.data.transactionsDetails[20].totalTopUpNotifReceived,
+  chartTransactionDetailsTotalTopUpNotifReceived21: data5.data.transactionsDetails[21].totalTopUpNotifReceived,
+  chartTransactionDetailsTotalTopUpNotifReceived22: data5.data.transactionsDetails[22].totalTopUpNotifReceived,
+  chartTransactionDetailsTotalTopUpNotifReceived23: data5.data.transactionsDetails[23].totalTopUpNotifReceived,
+  chartTransactionDetailsTotalTopUpNotifReceived24: data5.data.transactionsDetails[24].totalTopUpNotifReceived,
+  chartTransactionDetailsTotalTopUpNotifReceived25: data5.data.transactionsDetails[25].totalTopUpNotifReceived,
+  chartTransactionDetailsTotalTopUpNotifReceived26: data5.data.transactionsDetails[26].totalTopUpNotifReceived,
+  chartTransactionDetailsTotalTopUpNotifReceived27: data5.data.transactionsDetails[27].totalTopUpNotifReceived,
+  chartTransactionDetailsTotalTopUpNotifReceived28: data5.data.transactionsDetails[28].totalTopUpNotifReceived,
+  chartTransactionDetailsTotalTopUpNotifReceived29: data5.data.transactionsDetails[29].totalTopUpNotifReceived,
+  chartTransactionDetailsTotalTopUpNotifReceived30: data5.data.transactionsDetails[30].totalTopUpNotifReceived,
+
 
   //dibawah chart 
   chartTransactionOffersAccepted: data5.data.offersAccepted,
@@ -273,7 +436,149 @@ class Dashboard extends Component {
              progressStatisticCalculateOfPackageNameValue3,
              progressStatisticCalculateOfPackageNameValue4,
              progressStaticnName,
-             buatChart
+             buatChart,
+  chartTransactionDetailsTotalNotifReceived0,
+  chartTransactionDetailsTotalNotifReceived1,
+  chartTransactionDetailsTotalNotifReceived2,
+  chartTransactionDetailsTotalNotifReceived3,
+  chartTransactionDetailsTotalNotifReceived4,
+  chartTransactionDetailsTotalNotifReceived5,
+  chartTransactionDetailsTotalNotifReceived6,
+  chartTransactionDetailsTotalNotifReceived7,
+  chartTransactionDetailsTotalNotifReceived8,
+  chartTransactionDetailsTotalNotifReceived9,
+  chartTransactionDetailsTotalNotifReceived10,
+  chartTransactionDetailsTotalNotifReceived11,
+  chartTransactionDetailsTotalNotifReceived12,
+  chartTransactionDetailsTotalNotifReceived13,
+  chartTransactionDetailsTotalNotifReceived14,
+  chartTransactionDetailsTotalNotifReceived15,
+  chartTransactionDetailsTotalNotifReceived16,
+  chartTransactionDetailsTotalNotifReceived17,
+  chartTransactionDetailsTotalNotifReceived18,
+  chartTransactionDetailsTotalNotifReceived19,
+  chartTransactionDetailsTotalNotifReceived20,
+  chartTransactionDetailsTotalNotifReceived21,
+  chartTransactionDetailsTotalNotifReceived22,
+  chartTransactionDetailsTotalNotifReceived23,
+  chartTransactionDetailsTotalNotifReceived24,
+  chartTransactionDetailsTotalNotifReceived25,
+  chartTransactionDetailsTotalNotifReceived26,
+  chartTransactionDetailsTotalNotifReceived27,
+  chartTransactionDetailsTotalNotifReceived28,
+  chartTransactionDetailsTotalNotifReceived29,
+  chartTransactionDetailsTotalNotifReceived30,
+  chartTransactionDetailsTotalPushOffer0,
+  chartTransactionDetailsTotalPushOffer1,
+  chartTransactionDetailsTotalPushOffer2,
+  chartTransactionDetailsTotalPushOffer3,
+  chartTransactionDetailsTotalPushOffer4,
+  chartTransactionDetailsTotalPushOffer5,
+  chartTransactionDetailsTotalPushOffer6,
+  chartTransactionDetailsTotalPushOffer7,
+  chartTransactionDetailsTotalPushOffer8,
+  chartTransactionDetailsTotalPushOffer9,
+  chartTransactionDetailsTotalPushOffer10,
+  chartTransactionDetailsTotalPushOffer11,
+  chartTransactionDetailsTotalPushOffer12,
+  chartTransactionDetailsTotalPushOffer13,
+  chartTransactionDetailsTotalPushOffer14,
+  chartTransactionDetailsTotalPushOffer15,
+  chartTransactionDetailsTotalPushOffer16,
+  chartTransactionDetailsTotalPushOffer17,
+  chartTransactionDetailsTotalPushOffer18,
+  chartTransactionDetailsTotalPushOffer19,
+  chartTransactionDetailsTotalPushOffer20,
+  chartTransactionDetailsTotalPushOffer21,
+  chartTransactionDetailsTotalPushOffer22,
+  chartTransactionDetailsTotalPushOffer23,
+  chartTransactionDetailsTotalPushOffer24,
+  chartTransactionDetailsTotalPushOffer25,
+  chartTransactionDetailsTotalPushOffer26,
+  chartTransactionDetailsTotalPushOffer27,
+  chartTransactionDetailsTotalPushOffer28,
+  chartTransactionDetailsTotalPushOffer29,
+  chartTransactionDetailsTotalPushOffer30,
+  chartTransactionDetailsTotalTopUpNotifReceived0,
+  chartTransactionDetailsTotalTopUpNotifReceived1,
+  chartTransactionDetailsTotalTopUpNotifReceived2,
+  chartTransactionDetailsTotalTopUpNotifReceived3,
+  chartTransactionDetailsTotalTopUpNotifReceived4,
+  chartTransactionDetailsTotalTopUpNotifReceived5,
+  chartTransactionDetailsTotalTopUpNotifReceived6,
+  chartTransactionDetailsTotalTopUpNotifReceived7,
+  chartTransactionDetailsTotalTopUpNotifReceived8,
+  chartTransactionDetailsTotalTopUpNotifReceived9,
+  chartTransactionDetailsTotalTopUpNotifReceived10,
+  chartTransactionDetailsTotalTopUpNotifReceived11,
+  chartTransactionDetailsTotalTopUpNotifReceived12,
+  chartTransactionDetailsTotalTopUpNotifReceived13,
+  chartTransactionDetailsTotalTopUpNotifReceived14,
+  chartTransactionDetailsTotalTopUpNotifReceived15,
+  chartTransactionDetailsTotalTopUpNotifReceived16,
+  chartTransactionDetailsTotalTopUpNotifReceived17,
+  chartTransactionDetailsTotalTopUpNotifReceived18,
+  chartTransactionDetailsTotalTopUpNotifReceived19,
+  chartTransactionDetailsTotalTopUpNotifReceived20,
+  chartTransactionDetailsTotalTopUpNotifReceived21,
+  chartTransactionDetailsTotalTopUpNotifReceived22,
+  chartTransactionDetailsTotalTopUpNotifReceived23,
+  chartTransactionDetailsTotalTopUpNotifReceived24,
+  chartTransactionDetailsTotalTopUpNotifReceived25,
+  chartTransactionDetailsTotalTopUpNotifReceived26,
+  chartTransactionDetailsTotalTopUpNotifReceived27,
+  chartTransactionDetailsTotalTopUpNotifReceived28,
+  chartTransactionDetailsTotalTopUpNotifReceived29,
+  chartTransactionDetailsTotalTopUpNotifReceived30,
+  cardNotifReceivedChartData0V,
+  cardNotifReceivedChartData1V,
+  cardNotifReceivedChartData2V,
+  cardNotifReceivedChartData3V,
+  cardNotifReceivedChartData4V,
+  cardNotifReceivedChartData5V,
+  cardNotifReceivedChartData0W,
+  cardNotifReceivedChartData1W,
+  cardNotifReceivedChartData2W,
+  cardNotifReceivedChartData3W,
+  cardNotifReceivedChartData4W,
+  cardNotifReceivedChartData5W,
+  cardSentToScoringChartData0V,
+  cardSentToScoringChartData1V,
+  cardSentToScoringChartData2V,
+  cardSentToScoringChartData3V,
+  cardSentToScoringChartData4V,
+  cardSentToScoringChartData5V,
+  cardSentToScoringChartData0W,
+  cardSentToScoringChartData1W,
+  cardSentToScoringChartData2W,
+  cardSentToScoringChartData3W,
+  cardSentToScoringChartData4W,
+  cardSentToScoringChartData5W,
+  cardPushOfferChartData0V,
+  cardPushOfferChartData1V,
+  cardPushOfferChartData2V,
+  cardPushOfferChartData3V,
+  cardPushOfferChartData4V,
+  cardPushOfferChartData5V,
+  cardPushOfferChartData0W,
+  cardPushOfferChartData1W,
+  cardPushOfferChartData2W,
+  cardPushOfferChartData3W,
+  cardPushOfferChartData4W,
+  cardPushOfferChartData5W,
+  cardTopupNotifReceivedChartData0V,
+  cardTopupNotifReceivedChartData1V,
+  cardTopupNotifReceivedChartData2V,
+  cardTopupNotifReceivedChartData3V,
+  cardTopupNotifReceivedChartData4V,
+  cardTopupNotifReceivedChartData5V,
+  cardTopupNotifReceivedChartData0W,
+  cardTopupNotifReceivedChartData1W,
+  cardTopupNotifReceivedChartData2W,
+  cardTopupNotifReceivedChartData3W,
+  cardTopupNotifReceivedChartData4W,
+  cardTopupNotifReceivedChartData5W,
+
             } = this.state;
 
 
@@ -284,75 +589,20 @@ class Dashboard extends Component {
 
 
 
-
-
 // Card Chart 1
-const cardChartData1 = {
-  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-  datasets: [
-    {
-      label: 'My First dataset',
-      backgroundColor: brandPrimary,
-      borderColor: 'rgba(255,255,255,.55)',
-      data: chartData1,
-    },
-  ],
-};
-
-const cardChartOpts1 = {
-  tooltips: {
-    enabled: false,
-    custom: CustomTooltips
-  },
-  maintainAspectRatio: false,
-  legend: {
-    display: false,
-  },
-  scales: {
-    xAxes: [
-      {
-        gridLines: {
-          color: 'transparent',
-          zeroLineColor: 'transparent',
-        },
-        ticks: {
-          fontSize: 2,
-          fontColor: 'transparent',
-        },
-
-      }],
-    yAxes: [
-      {
-        display: false,
-        ticks: {
-          display: false,
-          min: Math.min.apply(Math, cardChartData1.datasets[0].data) - 5,
-          max: Math.max.apply(Math, cardChartData1.datasets[0].data) + 5,
-        },
-      }],
-  },
-  elements: {
-    line: {
-      borderWidth: 1,
-    },
-    point: {
-      radius: 4,
-      hitRadius: 10,
-      hoverRadius: 4,
-    },
-  }
-}
-
-
-// Card Chart 2
 const cardChartData2 = {
-  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+  labels: ['January', 'February', 'March', 'April', 'May', 'June'],
   datasets: [
     {
       label: 'My First dataset',
       backgroundColor: brandInfo,
       borderColor: 'rgba(255,255,255,.55)',
-      data: chartData2,
+      data: [cardNotifReceivedChartData0V,
+      cardNotifReceivedChartData1V,
+      cardNotifReceivedChartData2V,
+      cardNotifReceivedChartData3V,
+      cardNotifReceivedChartData4V,
+      cardNotifReceivedChartData5V],
     },
   ],
 };
@@ -403,15 +653,84 @@ const cardChartOpts2 = {
   },
 };
 
+// Card Chart 2
+const cardChartData1 = {
+  labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+  datasets: [
+    {
+      label: 'My First dataset',
+      backgroundColor: brandPrimary,
+      borderColor: 'rgba(255,255,255,.55)',
+      data: 
+      [cardSentToScoringChartData0V,
+      cardSentToScoringChartData1V,
+      cardSentToScoringChartData2V,
+      cardSentToScoringChartData3V,
+      cardSentToScoringChartData4V,
+      cardSentToScoringChartData5V],
+    },
+  ],
+};
+
+const cardChartOpts1 = {
+  tooltips: {
+    enabled: false,
+    custom: CustomTooltips
+  },
+  maintainAspectRatio: false,
+  legend: {
+    display: false,
+  },
+  scales: {
+    xAxes: [
+      {
+        gridLines: {
+          color: 'transparent',
+          zeroLineColor: 'transparent',
+        },
+        ticks: {
+          fontSize: 2,
+          fontColor: 'transparent',
+        },
+
+      }],
+    yAxes: [
+      {
+        display: false,
+        ticks: {
+          display: false,
+          min: Math.min.apply(Math, cardChartData1.datasets[0].data) - 5,
+          max: Math.max.apply(Math, cardChartData1.datasets[0].data) + 5,
+        },
+      }],
+  },
+  elements: {
+    line: {
+      borderWidth: 1,
+    },
+    point: {
+      radius: 4,
+      hitRadius: 10,
+      hoverRadius: 4,
+    },
+  }
+}
+
+
 // Card Chart 3
 const cardChartData3 = {
-  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+  labels: ['January', 'February', 'March', 'April', 'May', 'June'],
   datasets: [
     {
       label: 'My First dataset',
       backgroundColor: 'rgba(255,255,255,.2)',
       borderColor: 'rgba(255,255,255,.55)',
-      data: chartData1,
+      data:  [cardPushOfferChartData0V,
+        cardPushOfferChartData1V,
+        cardPushOfferChartData2V,
+        cardPushOfferChartData3V,
+        cardPushOfferChartData4V,
+        cardPushOfferChartData5V],
     },
   ],
 };
@@ -449,13 +768,18 @@ const cardChartOpts3 = {
 
 // Card Chart 4
 const cardChartData4 = {
-  labels: ['', '', '', '', '', '', '', ''],
+  labels: ['', '', '', '', '', ''],
   datasets: [
     {
       label: 'My First dataset',
       backgroundColor: 'rgba(255,255,255,.3)',
       borderColor: 'transparent',
-      data: chartData2,
+      data:   [cardTopupNotifReceivedChartData0V,
+        cardTopupNotifReceivedChartData1V,
+        cardTopupNotifReceivedChartData2V,
+        cardTopupNotifReceivedChartData3V,
+        cardTopupNotifReceivedChartData4V,
+        cardTopupNotifReceivedChartData5V],
       barPercentage: 0.6,
     },
   ],
@@ -564,29 +888,135 @@ const x= chartTransactionDetails;
 console.log(x)
 
 var elements = 27;
-var data1 = chartData1;
-var data2 = chartData2;
-var labels = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su', 'Mo'];
+var data1 = 
+[chartTransactionDetailsTotalNotifReceived0,
+chartTransactionDetailsTotalNotifReceived1,
+chartTransactionDetailsTotalNotifReceived2,
+chartTransactionDetailsTotalNotifReceived3,
+chartTransactionDetailsTotalNotifReceived4,
+chartTransactionDetailsTotalNotifReceived5,
+chartTransactionDetailsTotalNotifReceived6,
+chartTransactionDetailsTotalNotifReceived7,
+chartTransactionDetailsTotalNotifReceived8,
+chartTransactionDetailsTotalNotifReceived9,
+chartTransactionDetailsTotalNotifReceived10,
+chartTransactionDetailsTotalNotifReceived11,
+chartTransactionDetailsTotalNotifReceived12,
+chartTransactionDetailsTotalNotifReceived13,
+chartTransactionDetailsTotalNotifReceived14,
+chartTransactionDetailsTotalNotifReceived15,
+chartTransactionDetailsTotalNotifReceived16,
+chartTransactionDetailsTotalNotifReceived17,
+chartTransactionDetailsTotalNotifReceived18,
+chartTransactionDetailsTotalNotifReceived19,
+chartTransactionDetailsTotalNotifReceived20,
+chartTransactionDetailsTotalNotifReceived21,
+chartTransactionDetailsTotalNotifReceived22,
+chartTransactionDetailsTotalNotifReceived23,
+chartTransactionDetailsTotalNotifReceived24,
+chartTransactionDetailsTotalNotifReceived25,
+chartTransactionDetailsTotalNotifReceived26,
+chartTransactionDetailsTotalNotifReceived27,
+chartTransactionDetailsTotalNotifReceived28,
+chartTransactionDetailsTotalNotifReceived29,
+chartTransactionDetailsTotalNotifReceived30];
+
+
+var data2 = [chartTransactionDetailsTotalPushOffer0,
+  chartTransactionDetailsTotalPushOffer1,
+  chartTransactionDetailsTotalPushOffer2,
+  chartTransactionDetailsTotalPushOffer3,
+  chartTransactionDetailsTotalPushOffer4,
+  chartTransactionDetailsTotalPushOffer5,
+  chartTransactionDetailsTotalPushOffer6,
+  chartTransactionDetailsTotalPushOffer7,
+  chartTransactionDetailsTotalPushOffer8,
+  chartTransactionDetailsTotalPushOffer9,
+  chartTransactionDetailsTotalPushOffer10,
+  chartTransactionDetailsTotalPushOffer11,
+  chartTransactionDetailsTotalPushOffer12,
+  chartTransactionDetailsTotalPushOffer13,
+  chartTransactionDetailsTotalPushOffer14,
+  chartTransactionDetailsTotalPushOffer15,
+  chartTransactionDetailsTotalPushOffer16,
+  chartTransactionDetailsTotalPushOffer17,
+  chartTransactionDetailsTotalPushOffer18,
+  chartTransactionDetailsTotalPushOffer19,
+  chartTransactionDetailsTotalPushOffer20,
+  chartTransactionDetailsTotalPushOffer21,
+  chartTransactionDetailsTotalPushOffer22,
+  chartTransactionDetailsTotalPushOffer23,
+  chartTransactionDetailsTotalPushOffer24,
+  chartTransactionDetailsTotalPushOffer25,
+  chartTransactionDetailsTotalPushOffer26,
+  chartTransactionDetailsTotalPushOffer27,
+  chartTransactionDetailsTotalPushOffer28,
+  chartTransactionDetailsTotalPushOffer29,
+  chartTransactionDetailsTotalPushOffer30];
+
+
+var data3 = [chartTransactionDetailsTotalTopUpNotifReceived0,
+  chartTransactionDetailsTotalTopUpNotifReceived1,
+  chartTransactionDetailsTotalTopUpNotifReceived2,
+  chartTransactionDetailsTotalTopUpNotifReceived3,
+  chartTransactionDetailsTotalTopUpNotifReceived4,
+  chartTransactionDetailsTotalTopUpNotifReceived5,
+  chartTransactionDetailsTotalTopUpNotifReceived6,
+  chartTransactionDetailsTotalTopUpNotifReceived7,
+  chartTransactionDetailsTotalTopUpNotifReceived8,
+  chartTransactionDetailsTotalTopUpNotifReceived9,
+  chartTransactionDetailsTotalTopUpNotifReceived10,
+  chartTransactionDetailsTotalTopUpNotifReceived11,
+  chartTransactionDetailsTotalTopUpNotifReceived12,
+  chartTransactionDetailsTotalTopUpNotifReceived13,
+  chartTransactionDetailsTotalTopUpNotifReceived14,
+  chartTransactionDetailsTotalTopUpNotifReceived15,
+  chartTransactionDetailsTotalTopUpNotifReceived16,
+  chartTransactionDetailsTotalTopUpNotifReceived17,
+  chartTransactionDetailsTotalTopUpNotifReceived18,
+  chartTransactionDetailsTotalTopUpNotifReceived19,
+  chartTransactionDetailsTotalTopUpNotifReceived20,
+  chartTransactionDetailsTotalTopUpNotifReceived21,
+  chartTransactionDetailsTotalTopUpNotifReceived22,
+  chartTransactionDetailsTotalTopUpNotifReceived23,
+  chartTransactionDetailsTotalTopUpNotifReceived24,
+  chartTransactionDetailsTotalTopUpNotifReceived25,
+  chartTransactionDetailsTotalTopUpNotifReceived26,
+  chartTransactionDetailsTotalTopUpNotifReceived27,
+  chartTransactionDetailsTotalTopUpNotifReceived28,
+  chartTransactionDetailsTotalTopUpNotifReceived29,
+  chartTransactionDetailsTotalTopUpNotifReceived30];
+
+
+var labels = ['1', '2', '3', '4', '5', '6', '7', '8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31'];
 
 
 const mainChart = {
   labels: labels,
   datasets: [
     {
-      label: 'data set pertama',
+      label: 'Total Notif Received',
       backgroundColor: hexToRgba(brandInfo, 10),
-      borderColor: brandInfo,
+      borderColor: brandPrimary,
       pointHoverBackgroundColor: '#fff',
       borderWidth: 2,
       data: data1,
     },
     {
-      label: 'data set kedua',
+      label: 'Total Push Offer',
       backgroundColor: 'transparent',
-      borderColor: brandSuccess,
+      borderColor: brandWarning,
       pointHoverBackgroundColor: '#fff',
       borderWidth: 2,
       data: data2,
+    },
+    {
+      label: 'Total Top Up Notif Received',
+      backgroundColor: 'transparent',
+      borderColor: brandDanger,
+      pointHoverBackgroundColor: '#fff',
+      borderWidth: 2,
+      data: data3,
     },
   ],
 };
@@ -621,7 +1051,7 @@ const mainChartOpts = {
           beginAtZero: true,
           maxTicksLimit: 5,
           stepSize: Math.ceil(250 / 5),
-          max: 250,
+          max: 3000000,
         },
       }],
   },

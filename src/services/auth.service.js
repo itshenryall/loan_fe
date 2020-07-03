@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://178.128.222.35:9100/loan-engine-web-services/api/auth/";
+const API_URL = "http://localhost:8080/api/auth/";
 
 class AuthService {
   login(username, password) {
