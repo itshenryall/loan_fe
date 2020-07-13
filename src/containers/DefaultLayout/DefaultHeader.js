@@ -6,6 +6,15 @@ import { AppAsideToggler, AppNavbarBrand, AppSidebarToggler } from '@coreui/reac
 import logo from '../../assets/img/brand/logo.svg'
 import sygnet from '../../assets/img/brand/sygnet.svg'
 import AuthService from "../../services/auth.service";
+
+
+
+
+
+
+
+
+
 const propTypes = {
   children: PropTypes.node,
 };
@@ -46,9 +55,9 @@ class DefaultHeader extends Component {
             <NavLink to="#" className="nav-link">Settings</NavLink>
           </NavItem>
 
-          <NavItem className="px-3">
+          {/*<NavItem className="px-3">
             <NavLink to="/mod" className="nav-link">Moderator</NavLink>
-          </NavItem>
+  </NavItem>*/}
          
         </Nav>
         <Nav className="ml-auto" navbar>

@@ -11,7 +11,7 @@ import { CSVLink } from "react-csv"
 
 class Charts extends Component {
   state = {
-    items: []
+    items: [],
   }
 
   getItems(){
@@ -85,6 +85,7 @@ class Charts extends Component {
             <DataTable items={this.state.items} updateState={this.updateState} deleteItemFromState={this.deleteItemFromState} />
           </Col>
         </Row>
+
         
       </Container>
     )

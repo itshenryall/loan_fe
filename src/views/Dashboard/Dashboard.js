@@ -33,6 +33,11 @@ import Listx from "./Listx";
 import { HashRouter, Route, Switch, Redirect } from 'react-router-dom';
 
 
+import ReactDOM from "react-dom";
+import html2canvas from "html2canvas";
+const pdfConverter = require("jspdf");
+
+
 const Widget03 = lazy(() => import('../../views/Widgets/Widget03'));
 
 const brandPrimary = getStyle('--primary')
@@ -82,6 +87,11 @@ class Dashboard extends Component {
 
   componentDidMount() {
     let user = JSON.parse(localStorage.getItem('user'));
+
+    if (user === null) {
+      return <Redirect to='/login'/>;
+   }
+
     console.log('token' + user.accessToken)
 
     Promise.all([
@@ -112,6 +122,7 @@ class Dashboard extends Component {
       fetch("http://localhost:8080/api/dashboard/dummy-topup-notif-received", {
        method: 'GET',
        withCredentials: true,
+
        headers:{
                   Authorization: 'Bearer ' + user.accessToken,
           },   
@@ -134,12 +145,6 @@ class Dashboard extends Component {
                        Authorization: 'Bearer ' + user.accessToken,
                },   
              }),
-
-
-             fetch("http://www.json-generator.com/api/json/get/cfxsabgOSq?indent=2"),
-
-
-             fetch("http://www.json-generator.com/api/json/get/cfIzcYmlnS?indent=2"),
             
 
       ])
@@ -147,11 +152,11 @@ class Dashboard extends Component {
 
         
       //.then((res) => res.json())
-      .then(([res1, res2, res3, res4, res5, res6, res7, res8]) => Promise.all([res1.json(), res2.json(), res3.json(), res4.json(), res5.json(), res6.json(), res7.json(), res8.json()]))
+      .then(([res1, res2, res3, res4, res5, res6]) => Promise.all([res1.json(), res2.json(), res3.json(), res4.json(), res5.json(), res6.json()]))
       
      
      
- .then(([data1, data2, data3, data4, data5, data6, data7, data8]) => this.setState({
+ .then(([data1, data2, data3, data4, data5, data6]) => this.setState({
   currentUser: AuthService.getCurrentUser(),
   isLoading: false,
 
@@ -377,8 +382,6 @@ class Dashboard extends Component {
   data: data6.data.packages,
 
   //testing data chart
-  chartData1: data7,
-  chartData2: data8,
 
 
 
@@ -391,6 +394,21 @@ class Dashboard extends Component {
 
 
   }
+
+  //downloadmainchart
+  demoFromHTML() {
+    let input = window.document.getElementsByClassName("divToPDF")[0];
+    html2canvas(input)
+      .then(canvas => {
+        console.log(canvas);
+        const imgData = canvas.toDataURL("image/png");
+        const pdf = new pdfConverter("l", "pt");
+        pdf.addImage(imgData, "JPEG", 15, 110, 800, 250);
+        pdf.save("mainchart.pdf");
+      })
+      .catch(err => console.log(err.message));
+  }
+  
 
 
     render () {
@@ -1017,6 +1035,7 @@ const mainChart = {
       pointHoverBackgroundColor: '#fff',
       borderWidth: 2,
       data: data3,
+      borderDash: [10,5]
     },
   ],
 };
@@ -1051,7 +1070,7 @@ const mainChartOpts = {
           beginAtZero: true,
           maxTicksLimit: 5,
           stepSize: Math.ceil(250 / 5),
-          max: 3000000,
+          max: 2100000,
         },
       }],
   },
@@ -1064,13 +1083,6 @@ const mainChartOpts = {
     },
   },
 };
-
-
-
-
-console.log(dataPackage)
-
-
 
 
 
@@ -1139,16 +1151,18 @@ console.log(dataPackage)
       <div className="small text-muted">{transactionDate}</div>
               </Col>
               <Col sm="7" className="d-none d-sm-inline-block">
-                <Button color="primary" className="float-right"><i className="icon-cloud-download"></i></Button>
+                <Button color="primary" className="float-right"
+                onClick={() => console.log("ici") || this.demoFromHTML()}><i className="icon-cloud-download"></i></Button>
                 <ButtonToolbar className="float-right" aria-label="Toolbar with button groups">
                   <ButtonGroup className="mr-3" aria-label="First group">
                   </ButtonGroup>
                 </ButtonToolbar>
               </Col>
             </Row>
+            <div className="divToPDF">
           <div className="chart-wrapper" style={{ height: 300 + 'px', marginTop: 40 + 'px' }}>
                 <Line data={mainChart} options={mainChartOpts} height={300} />
-               
+            </div>
             </div>
           </CardBody>
           <CardFooter>
@@ -1169,10 +1183,6 @@ console.log(dataPackage)
         </Card>
       </Col>
     </Row>
-
-
-
-
 
 
 
