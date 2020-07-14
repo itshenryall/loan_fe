@@ -1,113 +1,127 @@
-import React from 'react';
-import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import React from "react";
+import { Button, Form, FormGroup, Label, Input } from "reactstrap";
 
 class AddEditForm extends React.Component {
   state = {
-    id: 0,
-    first: '',
-    last: '',
-    email: '',
-    phone: '',
-    location: '',
-    hobby: ''
-  }
+    offerID: "",
+    packageType: "",
+    value: 0,
+  };
 
-  onChange = e => {
-    this.setState({[e.target.name]: e.target.value})
-  }
+  onChange = (e) => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
 
-  submitFormAdd = e => {
-    e.preventDefault()
-    fetch('http://localhost:3000/crud', {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        first: this.state.first,
-        last: this.state.last,
-        email: this.state.email,
-        phone: this.state.phone,
-        location: this.state.location,
-        hobby: this.state.hobby
-      })
-    })
-      .then(response => response.json())
-      .then(item => {
-        if(Array.isArray(item)) {
-          this.props.addItemToState(item[0])
-          this.props.toggle()
+  submitFormAdd = (e) => {
+    e.preventDefault();
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    fetch(
+      "https://cors-anywhere.herokuapp.com/http://178.128.222.35:9100/loan-engine-web-services/api/offeringpackage",
+      {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + user.accessToken,
+        },
+
+        body: JSON.stringify({
+          offerID: this.state.offerID,
+          packageType: this.state.packageType,
+          value: this.state.value,
+        }),
+      }
+    )
+      .then((response) => response.json())
+      .then((response) => response)
+      .then((response) => {
+        if (response.code >= 200) {
+          this.props.addItemToState(response.data);
+          this.props.toggle();
         } else {
-          console.log('failure')
+          console.log("failure");
         }
       })
-      .catch(err => console.log(err))
-  }
 
-  submitFormEdit = e => {
-    e.preventDefault()
-    fetch('http://localhost:3000/crud', {
-      method: 'put',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        id: this.state.id,
-        first: this.state.first,
-        last: this.state.last,
-        email: this.state.email,
-        phone: this.state.phone,
-        location: this.state.location,
-        hobby: this.state.hobby
-      })
-    })
-      .then(response => response.json())
-      .then(item => {
-        if(Array.isArray(item)) {
-          // console.log(item[0])
-          this.props.updateState(item[0])
-          this.props.toggle()
+      .catch((err) => console.log(err));
+  };
+
+  submitFormEdit = (e) => {
+    e.preventDefault();
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    fetch(
+      "https://cors-anywhere.herokuapp.com/http://178.128.222.35:9100/loan-engine-web-services/api/offeringpackage",
+      {
+        method: "put",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + user.accessToken,
+        },
+        body: JSON.stringify({
+          offerID: this.state.offerID,
+          packageType: this.state.packageType,
+          value: this.state.value,
+        }),
+      }
+    )
+      .then((response) => response.json())
+      .then((response) => response.code)
+      .then((response) => {
+        if (response.code >= 200) {
+          this.props.addItemToState(response.data);
+          this.props.toggle();
         } else {
-          console.log('failure')
+          console.log("failure");
         }
       })
-      .catch(err => console.log(err))
-  }
+      .catch((err) => console.log(err));
+  };
 
-  componentDidMount(){
+  componentDidMount() {
     // if item exists, populate the state with proper data
-    if(this.props.item){
-      const { id, first, last, email, phone, location, hobby } = this.props.item
-      this.setState({ id, first, last, email, phone, location, hobby })
+    if (this.props.item) {
+      const { offerID, packageType, value } = this.props.item;
+      this.setState({ offerID, packageType, value });
     }
   }
 
   render() {
     return (
-      <Form onSubmit={this.props.item ? this.submitFormEdit : this.submitFormAdd}>
+      <Form
+        onSubmit={this.props.item ? this.submitFormEdit : this.submitFormAdd}
+      >
         <FormGroup>
-          <Label for="first">First Name</Label>
-          <Input type="text" name="first" id="first" onChange={this.onChange} value={this.state.first === null ? '' : this.state.first} />
+          <Label for="offerID">Offer ID</Label>
+          <Input
+            type="text"
+            name="offerID"
+            id="offerID"
+            onChange={this.onChange}
+            value={this.state.offerID === null ? "" : this.state.offerID}
+          />
         </FormGroup>
         <FormGroup>
-          <Label for="last">Last Name</Label>
-          <Input type="text" name="last" id="last" onChange={this.onChange} value={this.state.last === null ? '' : this.state.last}  />
+          <Label for="packageType">Package Type</Label>
+          <Input
+            type="text"
+            name="packageType"
+            id="packageType"
+            onChange={this.onChange}
+            value={
+              this.state.packageType === null ? "" : this.state.packageType
+            }
+          />
         </FormGroup>
         <FormGroup>
-          <Label for="email">Email</Label>
-          <Input type="email" name="email" id="email" onChange={this.onChange} value={this.state.email === null ? '' : this.state.email}  />
-        </FormGroup>
-        <FormGroup>
-          <Label for="phone">Phone</Label>
-          <Input type="text" name="phone" id="phone" onChange={this.onChange} value={this.state.phone === null ? '' : this.state.phone}  placeholder="ex. 555-555-5555" />
-        </FormGroup>
-        <FormGroup>
-          <Label for="location">Location</Label>
-          <Input type="text" name="location" id="location" onChange={this.onChange} value={this.state.location === null ? '' : this.state.location}  placeholder="City, State" />
-        </FormGroup>
-        <FormGroup>
-          <Label for="hobby">Hobby</Label>
-          <Input type="text" name="hobby" id="hobby" onChange={this.onChange} value={this.state.hobby}  />
+          <Label for="value">Value</Label>
+          <Input
+            type="text"
+            name="value"
+            id="value"
+            onChange={this.onChange}
+            value={this.state.value === null ? "" : this.state.value}
+          />
         </FormGroup>
         <Button>Submit</Button>
       </Form>
@@ -115,4 +129,4 @@ class AddEditForm extends React.Component {
   }
 }
 
-export default AddEditForm
+export default AddEditForm;
