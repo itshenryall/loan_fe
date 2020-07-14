@@ -17,7 +17,17 @@ export default {
     {
       name: 'Offering Package',
       url: '/offer',
-      icon: 'icon-puzzle',
+      icon: 'icon-layers',
+    },
+    {
+      name: 'Loan Transaction',
+      url: '/transaction',
+      icon: 'icon-shuffle',
+    },
+    {
+      name: 'Loan AssignmentRule',
+      url: '/assignment',
+      icon: 'icon-pin',
     },
   ]
 };

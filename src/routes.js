@@ -24,6 +24,8 @@ const Buttons = React.lazy(() => import('./views/Buttons/Buttons'));
 const Charts = React.lazy(() => import('./views/Charts'));
 const Datatable = React.lazy(() => import('./components/Tables/DataTable'));
 const Offer = React.lazy(() => import('./views/Offering/Offering'));
+const Transaction = React.lazy(() => import('./views/LoanTransaction/Transaction'));
+const Assignment = React.lazy(() => import('./views/LoanAssignment/Assignment'));
 const Dashboard = React.lazy(() => import('./views/Dashboard'));
 const CoreUIIcons = React.lazy(() => import('./views/Icons/CoreUIIcons'));
 const Flags = React.lazy(() => import('./views/Icons/Flags'));
@@ -81,6 +83,8 @@ const routes = [
   { path: '/charts', name: 'Offering', component: Charts },
   { path: '/offeringpackage', name: 'DataTable', component: Datatable },
   { path: '/offer', name: 'Offer', component: Offer },
+  { path: '/transaction', name: 'Transaction', component: Transaction },
+  { path: '/assignment', name: 'Assignment', component: Assignment },
   { path: '/users', exact: true,  name: 'Users', component: Users },
   { path: '/users/:id', exact: true, name: 'User Details', component: User },
 ];

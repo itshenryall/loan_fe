@@ -9,7 +9,7 @@ import ModalForm from '../../components/Modals/Modal'
 import DataTable from '../../components/Tables/DataTable'
 import { CSVLink } from "react-csv"
 
-class Offering extends Component {
+class Assignment extends Component {
   state = {
     data: [],
   }
@@ -92,4 +92,4 @@ class Offering extends Component {
   }
 }
 
-export default Offering
+export default Assignment

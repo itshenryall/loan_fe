@@ -1,9 +1,10 @@
 import axios from 'axios';
 import authHeader from './auth-header';
 
-const API_URL = 'http://localhost:8080/api/test/';
+const API_URL = 'https://cors-anywhere.herokuapp.com/http://178.128.222.35:9100/loan-engine-web-services/api/test/';
 
-const API_URLX = 'http://localhost:8080/api/dashboard/dummy';
+
+const API_URLX = 'https://cors-anywhere.herokuapp.com/http://178.128.222.35:9100/loan-engine-web-services/api/dashboard/dummy';
 
 class UserService {
   getPublicContent() {

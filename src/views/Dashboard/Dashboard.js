@@ -92,10 +92,10 @@ class Dashboard extends Component {
       return <Redirect to='/login'/>;
    }
 
-    console.log('token' + user.accessToken)
+ 
 
     Promise.all([
-    fetch("http://localhost:8080/api/dashboard/dummy-notif-received", {
+    fetch("https://cors-anywhere.herokuapp.com/http://178.128.222.35:9100/loan-engine-web-services/api/dashboard/dummy-notif-received", {
        method: 'GET',
        withCredentials: true,
        headers:{
@@ -103,7 +103,7 @@ class Dashboard extends Component {
           },   
         }),
 
-        fetch("http://localhost:8080/api/dashboard/dummy-sent-to-scoring", {
+        fetch("https://cors-anywhere.herokuapp.com/http://178.128.222.35:9100/loan-engine-web-services/api/dashboard/dummy-sent-to-scoring", {
        method: 'GET',
        withCredentials: true,
        headers:{
@@ -111,7 +111,7 @@ class Dashboard extends Component {
           },   
         }),
 
-        fetch("http://localhost:8080/api/dashboard/dummy-push-offer", {
+        fetch("https://cors-anywhere.herokuapp.com/http://178.128.222.35:9100/loan-engine-web-services/api/dashboard/dummy-push-offer", {
        method: 'GET',
        withCredentials: true,
        headers:{
@@ -119,7 +119,7 @@ class Dashboard extends Component {
           },   
         }),
 
-      fetch("http://localhost:8080/api/dashboard/dummy-topup-notif-received", {
+      fetch("https://cors-anywhere.herokuapp.com/http://178.128.222.35:9100/loan-engine-web-services/api/dashboard/dummy-topup-notif-received", {
        method: 'GET',
        withCredentials: true,
 
@@ -128,7 +128,7 @@ class Dashboard extends Component {
           },   
         }),
 
-        fetch("http://localhost:8080/api/dashboard/dummy-transactions", {
+        fetch("https://cors-anywhere.herokuapp.com/http://178.128.222.35:9100/loan-engine-web-services/api/dashboard/dummy-transactions", {
           method: 'GET',
           withCredentials: true,
           headers:{
@@ -138,7 +138,7 @@ class Dashboard extends Component {
 
 
 
-           fetch("http://localhost:8080/api/dashboard/dummy-statistics-and-packages", {
+           fetch("https://cors-anywhere.herokuapp.com/http://178.128.222.35:9100/loan-engine-web-services/api/dashboard/dummy-statistics-and-packages", {
             method: 'GET',
             withCredentials: true,
             headers:{
@@ -893,8 +893,7 @@ this.state.buatChart.map((buatChart, key) => {
   let tnr= buatChart.totalNotifReceived;
   let tpo=buatChart.totalPushOffer;
   
-  console.log(tnr)
-  console.log(tpo)
+
 
 
          
@@ -903,7 +902,7 @@ this.state.buatChart.map((buatChart, key) => {
 
 // Main Chart
 const x= chartTransactionDetails;
-console.log(x)
+
 
 var elements = 27;
 var data1 = 
