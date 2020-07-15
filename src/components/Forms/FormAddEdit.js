@@ -26,8 +26,8 @@ class AddEditForm extends React.Component {
         },
 
         body: JSON.stringify({
-          offerID: this.state.offerID,
-          packageType: this.state.packageType,
+          offerID: this.state.offerID.toUpperCase(),
+          packageType: this.state.packageType.toUpperCase(),
           value: this.state.value,
         }),
       }
@@ -39,11 +39,11 @@ class AddEditForm extends React.Component {
           this.props.addItemToState(response.data);
           this.props.toggle();
         } else {
-          console.log("failure");
+          alert(response.message);
         }
       })
 
-      .catch((err) => console.log(err));
+      .catch((err) => alert(err.message));
   };
 
   submitFormEdit = (e) => {
@@ -59,8 +59,8 @@ class AddEditForm extends React.Component {
           Authorization: "Bearer " + user.accessToken,
         },
         body: JSON.stringify({
-          offerID: this.state.offerID,
-          packageType: this.state.packageType,
+          offerID: this.state.offerID.toUpperCase(),
+          packageType: this.state.packageType.toUpperCase(),
           value: this.state.value,
         }),
       }
@@ -72,10 +72,10 @@ class AddEditForm extends React.Component {
           this.props.addItemToState(response.data);
           this.props.toggle();
         } else {
-          console.log("failure");
+          alert(response.message);
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => alert(err.message));
   };
 
   componentDidMount() {
@@ -85,7 +85,6 @@ class AddEditForm extends React.Component {
       this.setState({ offerID, packageType, value });
     }
   }
-
   render() {
     return (
       <Form
@@ -107,6 +106,7 @@ class AddEditForm extends React.Component {
             type="text"
             name="packageType"
             id="packageType"
+            placeholder="ex: SMS, VOICE, DATA"
             onChange={this.onChange}
             value={
               this.state.packageType === null ? "" : this.state.packageType
