@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { HashRouter, Route, Switch, Redirect } from "react-router-dom";
-// import { renderRoutes } from 'react-router-config';
 import "./App.scss";
 
 import AuthService from "./services/auth.service";

@@ -11,12 +11,6 @@ class Offering extends Component {
   };
 
   getdata() {
-    // fetch(
-    //   "https://cors-anywhere.herokuapp.com/http://178.128.222.35:9100/loan-engine-web-services/api/offeringpackage"
-    // )
-    //   .then((response) => response.json())
-    //   .then((data) => this.setState({ data }))
-    //   .catch((err) => console.log(err));
     const user = JSON.parse(localStorage.getItem("user"));
 
     fetch(
