@@ -12,7 +12,7 @@ class Offering extends Component {
 
   getdata() {
     const user = JSON.parse(localStorage.getItem("user"));
-
+    // /page?pageLimit=4&pageNumber=1 weird endpoint ?
     fetch(
       "https://cors-anywhere.herokuapp.com/http://178.128.222.35:9100/loan-engine-web-services/api/offeringpackage",
       {
@@ -25,7 +25,13 @@ class Offering extends Component {
     )
       .then((response) => response.json())
       .then((response) => response.data)
-      .then((data) => this.setState({ data }));
+      .then((data) => {
+        if (data) {
+          this.setState({ data });
+        }
+
+        this.setState({});
+      });
   }
 
   addItemToState = (item) => {
