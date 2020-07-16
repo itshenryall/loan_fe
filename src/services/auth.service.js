@@ -1,15 +1,16 @@
 import axios from "axios";
 
-const API_URL = "https://cors-anywhere.herokuapp.com/http://178.128.222.35:9100/loan-engine-web-services/api/auth/";
+const API_URL =
+  "https://cors-anywhere.herokuapp.com/http://178.128.222.35:9100/loan-engine-web-services/api/auth/";
 
 class AuthService {
   login(username, password) {
     return axios
       .post(API_URL + "signin", {
         username,
-        password
+        password,
       })
-      .then(response => {
+      .then((response) => {
         if (response.data.accessToken) {
           localStorage.setItem("user", JSON.stringify(response.data));
         }
@@ -20,19 +21,18 @@ class AuthService {
 
   logout() {
     localStorage.removeItem("user");
-    
   }
 
   register(username, email, password) {
     return axios.post(API_URL + "signup", {
       username,
       email,
-      password
+      password,
     });
   }
 
   getCurrentUser() {
-    return JSON.parse(localStorage.getItem('user'));;
+    return JSON.parse(localStorage.getItem("user"));
   }
 }
 
