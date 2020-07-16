@@ -66,15 +66,17 @@ class AddEditForm extends React.Component {
       }
     )
       .then((response) => response.json())
-      .then((response) => response.code)
+      .then((response) => response)
       .then((response) => {
         if (response.code >= 200) {
-          this.props.addItemToState(response.data);
+          this.props.updateState(response.data);
           this.props.toggle();
+          window.location.reload();
         } else {
           alert(response.message);
         }
       })
+
       .catch((err) => alert(err.message));
   };
 
