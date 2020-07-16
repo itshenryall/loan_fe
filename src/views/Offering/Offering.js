@@ -40,21 +40,21 @@ class Offering extends Component {
     }));
   };
 
-  updateState = (item) => {
-    const itemIndex = this.state.data.findIndex((data) => data.id === item.id);
+  updateState = (data) => {
+    const itemIndex = this.state.data.findIndex((data) => data.offerID === data.offerID);
     const newArray = [
       // destructure all data from beginning to the indexed item
       ...this.state.data.slice(0, itemIndex),
       // add the updated item to the array
-      item,
+      data,
       // add the rest of the data to the array from the index after the replaced item
       ...this.state.data.slice(itemIndex + 1),
     ];
     this.setState({ data: newArray });
   };
 
-  deleteItemFromState = (id) => {
-    const updateddata = this.state.data.filter((item) => item.id !== id);
+  deleteItemFromState = (offerID) => {
+    const updateddata = this.state.data.filter((data) => data.offerID !== offerID);
     this.setState({ data: updateddata });
   };
 
@@ -78,7 +78,7 @@ class Offering extends Component {
           <br />
           <Col>
             <CSVLink
-              filename={"db.csv"}
+              filename={"offering_package.csv"}
               color="primary"
               style={{ float: "left", marginRight: "10px" }}
               className="btn btn-primary"
