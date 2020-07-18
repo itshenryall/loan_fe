@@ -44,6 +44,7 @@
     "react-redux": "^7.2.0",
     "react-router-config": "^5.1.1",
     "react-router-dom": "^5.2.0",
+    "react-table-v6": "^6.8.6",
     "react-test-renderer": "^16.13.1",
     "react-validation": "^3.0.7",
     "reactstrap": "^8.4.1",

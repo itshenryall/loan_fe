@@ -1,31 +1,31 @@
 import React, { Component } from "react";
 
-import {
-  Container,
-  Row,
-  Col,
-  Pagination,
-  PaginationItem,
-  PaginationLink,
-} from "reactstrap";
+import { Container, Row, Col, Input, Button } from "reactstrap";
 import ModalForm from "../../components/Modals/Modal";
-import DataTable from "../../components/Tables/DataTable";
 import { CSVLink } from "react-csv";
+import ReactTable from "react-table-v6";
+import "react-table-v6/react-table.css";
 
+/* 
+for documentation react-table purpose
+https://github.com/tannerlinsley/react-table
+*/
 class Offering extends Component {
   state = {
     data: [],
+    filteredData: [],
     page: 0,
     totalPage: 0,
     nextPage: 0,
     prevPage: 0,
     limit: 5,
+    searchInput: "",
   };
 
   getdata() {
     const user = JSON.parse(localStorage.getItem("user"));
     fetch(
-      `https://cors-anywhere.herokuapp.com/http://178.128.222.35:9100/loan-engine-web-services/api/offeringpackage/page?pageLimit=${this.state.limit}&pageNumber=${this.state.page}`,
+      `https://cors-anywhere.herokuapp.com/http://178.128.222.35:9100/loan-engine-web-services/api/offeringpackage`,
       {
         method: "get",
         headers: {
@@ -39,7 +39,6 @@ class Offering extends Component {
       .then((response) => {
         if (response.data) {
           this.setState({ data: response.data });
-          this.setState({ totalPage: response.meta.totalPage });
         }
 
         this.setState({});
@@ -77,21 +76,78 @@ class Offering extends Component {
   componentDidMount() {
     this.getdata();
   }
-  handlePageUp = () => {
-    const nextPages = Math.min(this.state.page + 1, this.state.totalPage);
-
-    this.setState({ page: nextPages }, () => {
-      this.getdata();
+  handleChange = (event) => {
+    this.setState({ searchInput: event.target.value }, () => {
+      this.globalSearch();
     });
   };
-  handlePageDown = () => {
-    const prevPages = Math.max(this.state.page - 1, 0);
-
-    this.setState({ page: prevPages }, () => {
-      this.getdata();
+  globalSearch = () => {
+    let { searchInput, data } = this.state;
+    let filteredData = data.filter((value) => {
+      return (
+        value.offerID.toLowerCase().includes(searchInput.toLowerCase()) ||
+        value.packageType.toLowerCase().includes(searchInput.toLowerCase()) ||
+        value.value.toString().toLowerCase().includes(searchInput.toLowerCase())
+      );
     });
+    this.setState({ filteredData: filteredData });
   };
+  deleteItem = (offerID) => {
+    let confirmDelete = window.confirm("Delete item forever?");
+    if (confirmDelete) {
+      const user = JSON.parse(localStorage.getItem("user"));
+
+      fetch(
+        "https://cors-anywhere.herokuapp.com/http://178.128.222.35:9100/loan-engine-web-services/api/offeringpackage/" +
+          `${offerID}`,
+        {
+          method: "delete",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + user.accessToken,
+          },
+        }
+      )
+        .then((response) => response.json())
+        .then((response) => response.code)
+        .then((code) => {
+          if (code >= 200) {
+            window.location.reload();
+          }
+        });
+    }
+  };
+  columns = [
+    {
+      Header: "ID",
+      accessor: "offerID",
+    },
+    {
+      Header: "Package Type",
+      accessor: "packageType",
+    },
+    {
+      Header: "Value",
+      accessor: "value",
+    },
+    {
+      Header: "Action",
+      Cell: ({ row }) => (
+        <>
+          <ModalForm
+            buttonLabel="Edit"
+            item={row}
+            updateState={this.updateState}
+          />
+          <Button color="danger" onClick={() => this.deleteItem(row.offerID)}>
+            Delete
+          </Button>
+        </>
+      ),
+    },
+  ];
   render() {
+    let { data, columns, searchInput } = this.state;
     return (
       <Container className="App">
         <Row>
@@ -124,21 +180,29 @@ class Offering extends Component {
 
         <Row>
           <Col>
-            <DataTable
-              data={this.state.data}
-              updateState={this.updateState}
-              deleteItemFromState={this.deleteItemFromState}
+            <br />
+            <Input
+              size="large"
+              name="searchInput"
+              value={this.state.searchInput || ""}
+              onChange={this.handleChange}
+              label="Search"
+              placeholder="Search"
+            />
+            <br />
+            <br />
+            <ReactTable
+              data={
+                this.state.filteredData && this.state.filteredData.length
+                  ? this.state.filteredData
+                  : this.state.data
+              }
+              columns={this.columns}
+              defaultPageSize={10}
+              className="-striped -highlight"
             />
           </Col>
         </Row>
-        <Pagination aria-label="Page navigation example">
-          <PaginationItem>
-            <PaginationLink previous onClick={this.handlePageDown} />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink next onClick={this.handlePageUp} />
-          </PaginationItem>
-        </Pagination>
       </Container>
     );
   }
