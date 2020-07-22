@@ -1,20 +1,21 @@
 # loan engine FE
 
-How to run:
+# How to run:
 
 npm install
 
 npm start
 
-how to build:
+# how to build:
 
 npm run build
 
-feature:
-#login with jwt
+# feature:
 
-#crud with pagination and search (reactstrap)
+* login with jwt
 
-#report with pdf, png, csv
+* crud with pagination and search (reactstrap)
 
-#coreui template
+* report with pdf, png, csv
+
+* coreui template
