@@ -8,8 +8,8 @@ class DataTablesTransaction extends Component {
       const user = JSON.parse(localStorage.getItem("user"));
 
       fetch(
-        "https://cors-anywhere.herokuapp.com/http://178.128.222.35:9100/loan-engine-web-services/api/loantransaction/"+
-        `${loanTrxID}`,
+        "https://cors-anywhere.herokuapp.com/http://178.128.222.35:9100/loan-engine-web-services/api/loantransaction/" +
+          `${loanTrxID}`,
         {
           method: "delete",
           headers: {
@@ -49,7 +49,12 @@ class DataTablesTransaction extends Component {
                 onClick={() => this.deleteItem(item.loanTrxID)}
               >
                 Del
-              </Button>
+              </Button>{" "}
+              <ModalForm
+                buttonLabel="Request Offering"
+                item={item}
+                updateState={this.props.updateState}
+              />
             </div>
           </td>
         </tr>
@@ -57,15 +62,20 @@ class DataTablesTransaction extends Component {
     });
 
     return (
-      <Table Table hover responsive className="table-outline mb-0 d-none d-sm-table">
+      <Table
+        Table
+        hover
+        responsive
+        className="table-outline mb-0 d-none d-sm-table"
+      >
         <thead>
           <tr style={{ backgroundColor: "#c8ced3", color: "#5c6873" }}>
-            <th>loan Trx ID</th>
-            <th>MSISDN</th>
-            <th>Credit Score</th>
-            <th>Loan Remarks</th>
-            <th>Recommendation Limit</th>
-            <th>Action</th>
+            <th style={{ width: "5%" }}>loan Trx ID</th>
+            <th style={{ width: "5%" }}>MSISDN</th>
+            <th style={{ width: "5%" }}>Credit Score</th>
+            <th style={{ width: "5%" }}>Loan Remarks</th>
+            <th style={{ width: "5%" }}>Recommendation Limit</th>
+            <th style={{ width: "5%" }}>Actionxxxx</th>
           </tr>
         </thead>
         <tbody>{data}</tbody>

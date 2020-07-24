@@ -42,6 +42,7 @@ class AddEditFormLoanAssignmentRule extends React.Component {
         if (response.code >= 200) {
           this.props.addItemToState(response.data);
           this.props.toggle();
+          window.location.reload();
         } else {
           alert(response.message);
         }

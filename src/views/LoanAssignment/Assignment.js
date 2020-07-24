@@ -1,10 +1,20 @@
 import React, { Component } from "react";
 
-import { Container, Row, Col, Input, Button, Card, CardHeader, CardBody } from "reactstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Input,
+  Button,
+  Card,
+  CardHeader,
+  CardBody,
+} from "reactstrap";
 import ModalForm from "../../components/Modals/ModalLoanAssignmentRule";
 import { CSVLink } from "react-csv";
 import ReactTable from "react-table-v6";
 import "react-table-v6/react-table.css";
+import { Redirect } from "react-router-dom";
 
 /* 
 for documentation react-table purpose
@@ -24,6 +34,11 @@ class Assignment extends Component {
 
   getdata() {
     const user = JSON.parse(localStorage.getItem("user"));
+
+    if (user === null) {
+      return <Redirect to="/login" />;
+    }
+
     fetch(
       "https://cors-anywhere.herokuapp.com/http://178.128.222.35:9100/loan-engine-web-services/api/loanassignmentrule",
       {
@@ -52,7 +67,9 @@ class Assignment extends Component {
   };
 
   updateState = (data) => {
-    const itemIndex = this.state.data.findIndex((data) => data.larID === data.larID);
+    const itemIndex = this.state.data.findIndex(
+      (data) => data.larID === data.larID
+    );
     const newArray = [
       // destructure all data from beginning to the indexed item
       ...this.state.data.slice(0, itemIndex),
@@ -82,10 +99,21 @@ class Assignment extends Component {
     let filteredData = data.filter((value) => {
       return (
         value.larID.toLowerCase().includes(searchInput.toLowerCase()) ||
-        value.larCreditScore.toLowerCase().includes(searchInput.toLowerCase()) ||
-        value.larLoanRemarks.toString().toLowerCase().includes(searchInput.toLowerCase()) ||
-        value.larRecommendedLimit.toString().toLowerCase().includes(searchInput.toLowerCase()) ||
-        value.larMaxSeq.toString().toLowerCase().includes(searchInput.toLowerCase())
+        value.larCreditScore
+          .toLowerCase()
+          .includes(searchInput.toLowerCase()) ||
+        value.larLoanRemarks
+          .toString()
+          .toLowerCase()
+          .includes(searchInput.toLowerCase()) ||
+        value.larRecommendedLimit
+          .toString()
+          .toLowerCase()
+          .includes(searchInput.toLowerCase()) ||
+        value.larMaxSeq
+          .toString()
+          .toLowerCase()
+          .includes(searchInput.toLowerCase())
       );
     });
     this.setState({ filteredData: filteredData });
@@ -156,69 +184,66 @@ class Assignment extends Component {
     let { data, columns, searchInput } = this.state;
     return (
       <Card>
-      <CardHeader>
-        Table Loan Assignment Rule
-      </CardHeader>
-      <CardBody>
-      <Container className="App">
-        <Row>
-          <Col>
-            <h1 style={{ margin: "20px 0" }}></h1>
-          </Col>
-        </Row>
+        <CardHeader>Table Loan Assignment Rule</CardHeader>
+        <CardBody>
+          <Container className="App">
+            <Row>
+              <Col>
+                <h1 style={{ margin: "20px 0" }}></h1>
+              </Col>
+            </Row>
 
-        <Row>
-          <Col>
-          <span class="float-left">
-            <CSVLink
-              filename={"Assignment_rule.csv"}
-              color="primary"
-              style={{ float: "left", marginRight: "10px" }}
-              className="btn btn-primary"
-              data={this.state.data}
-            >
-              Download CSV
-            </CSVLink>
-            </span>
-            <span class="float-left">
-            <ModalForm
-              buttonLabel="Add Item"
-              addItemToState={this.addItemToState}
-            />
-            </span>
-            <span class="float-right">
-          <Input
-              size="large"
-              name="searchInput"
-              value={this.state.searchInput || ""}
-              onChange={this.handleChange}
-              label="Search"
-              placeholder="Search"
-            />
-          </span>
-          </Col>
-        </Row>
+            <Row>
+              <Col>
+                <span class="float-left">
+                  <CSVLink
+                    filename={"Assignment_rule.csv"}
+                    color="primary"
+                    style={{ float: "left", marginRight: "10px" }}
+                    className="btn btn-primary"
+                    data={this.state.data}
+                  >
+                    Download CSV
+                  </CSVLink>
+                </span>
+                <span class="float-left">
+                  <ModalForm
+                    buttonLabel="Add Item"
+                    addItemToState={this.addItemToState}
+                  />
+                </span>
+                <span class="float-right">
+                  <Input
+                    size="large"
+                    name="searchInput"
+                    value={this.state.searchInput || ""}
+                    onChange={this.handleChange}
+                    label="Search"
+                    placeholder="Search"
+                  />
+                </span>
+              </Col>
+            </Row>
 
-        <Row>
-          <Col>
-          <br />
-            <ReactTable
-              data={
-                this.state.filteredData && this.state.filteredData.length
-                  ? this.state.filteredData
-                  : this.state.data
-              }
-              columns={this.columns}
-              defaultPageSize={10}
-              className="-striped -highlight"
-            />
-          </Col>
-        </Row>
-      </Container>
-      </CardBody>
-      <br />
+            <Row>
+              <Col>
+                <br />
+                <ReactTable
+                  data={
+                    this.state.filteredData && this.state.filteredData.length
+                      ? this.state.filteredData
+                      : this.state.data
+                  }
+                  columns={this.columns}
+                  defaultPageSize={10}
+                  className="-striped -highlight"
+                />
+              </Col>
+            </Row>
+          </Container>
+        </CardBody>
+        <br />
       </Card>
-    
     );
   }
 }

@@ -1,7 +1,6 @@
 import React from "react";
 import { Button, Form, FormGroup, Label, Input } from "reactstrap";
 
-
 class AddEditForm extends React.Component {
   state = {
     offerID: "",
@@ -39,6 +38,7 @@ class AddEditForm extends React.Component {
         if (response.code >= 200) {
           this.props.addItemToState(response.data);
           this.props.toggle();
+          window.location.reload();
         } else {
           alert(response.message);
         }
@@ -101,7 +101,8 @@ class AddEditForm extends React.Component {
             id="offerID"
             onChange={this.onChange}
             value={this.state.offerID === null ? "" : this.state.offerID}
-          required/>
+            required
+          />
         </FormGroup>
         <FormGroup>
           <Label for="packageType">Package Type</Label>
@@ -114,7 +115,8 @@ class AddEditForm extends React.Component {
             value={
               this.state.packageType === null ? "" : this.state.packageType
             }
-            required/>
+            required
+          />
         </FormGroup>
         <FormGroup>
           <Label for="value">Value</Label>
@@ -124,7 +126,8 @@ class AddEditForm extends React.Component {
             id="value"
             onChange={this.onChange}
             value={this.state.value === null ? "" : this.state.value}
-            required/>
+            required
+          />
         </FormGroup>
         <Button>Submit</Button>
       </Form>

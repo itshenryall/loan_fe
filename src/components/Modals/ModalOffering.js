@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Button, Modal, ModalHeader, ModalBody } from "reactstrap";
-import AddEditForm from "../Forms/FormAddEditCustomer";
+import AddListForm from "../Forms/FormListOffering";
 
-class ModalLoanCustomer extends Component {
+class ModalTransaction extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -28,18 +28,7 @@ class ModalLoanCustomer extends Component {
     let button = "";
     let title = "";
 
-    if (label === "Edit") {
-      button = (
-        <Button
-          color="warning"
-          onClick={this.toggle}
-          style={{ float: "left", marginRight: "10px" }}
-        >
-          {label}
-        </Button>
-      );
-      title = "Edit Item";
-    } else {
+    if (label === "Request Offering") {
       button = (
         <Button
           color="success"
@@ -49,7 +38,9 @@ class ModalLoanCustomer extends Component {
           {label}
         </Button>
       );
-      title = "Add New Item";
+      title = "List Possible Offering";
+    } else {
+      alert("Not Found Data");
     }
 
     return (
@@ -64,9 +55,8 @@ class ModalLoanCustomer extends Component {
             {title}
           </ModalHeader>
           <ModalBody>
-            <AddEditForm
-              addItemToState={this.props.addItemToState}
-              updateState={this.props.updateState}
+            <AddListForm
+              listState={this.props.listState}
               toggle={this.toggle}
               item={this.props.item}
             />
@@ -77,4 +67,4 @@ class ModalLoanCustomer extends Component {
   }
 }
 
-export default ModalLoanCustomer;
+export default ModalTransaction;

@@ -83,6 +83,7 @@ class AddEditTransaction extends React.Component {
 
       .catch((err) => alert(err.message));
   };
+  
 
   componentDidMount() {
     // if item exists, populate the state with proper data

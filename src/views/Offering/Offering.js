@@ -1,10 +1,21 @@
 import React, { Component } from "react";
 
-import { Container, Row, Col, Input, Button, Card, CardHeader, CardBody } from "reactstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Input,
+  Button,
+  Card,
+  CardHeader,
+  CardBody,
+} from "reactstrap";
 import ModalForm from "../../components/Modals/Modal";
 import { CSVLink } from "react-csv";
 import ReactTable from "react-table-v6";
 import "react-table-v6/react-table.css";
+import { Redirect } from "react-router-dom";
+
 /* 
 for documentation react-table purpose
 https://github.com/tannerlinsley/react-table
@@ -24,7 +35,7 @@ class Offering extends Component {
   getdata() {
     const user = JSON.parse(localStorage.getItem("user"));
     fetch(
-      `https://cors-anywhere.herokuapp.com/http://178.128.222.35:9100/loan-engine-web-services/api/offeringpackage`,
+      "https://cors-anywhere.herokuapp.com/http://178.128.222.35:9100/loan-engine-web-services/api/offeringpackage",
       {
         method: "get",
         headers: {
@@ -96,6 +107,10 @@ class Offering extends Component {
     if (confirmDelete) {
       const user = JSON.parse(localStorage.getItem("user"));
 
+      if (user === null) {
+        return <Redirect to="/login" />;
+      }
+
       fetch(
         "https://cors-anywhere.herokuapp.com/http://178.128.222.35:9100/loan-engine-web-services/api/offeringpackage/" +
           `${offerID}`,
@@ -149,69 +164,66 @@ class Offering extends Component {
     let { data, columns, searchInput } = this.state;
     return (
       <Card>
-      <CardHeader>
-        Table Offering Package
-      </CardHeader>
-      <CardBody>
-      <Container className="App">
-        <Row>
-          <Col>
-            <h1 style={{ margin: "20px 0" }}></h1>
-          </Col>
-        </Row>
+        <CardHeader>Table Offering Package</CardHeader>
+        <CardBody>
+          <Container className="App">
+            <Row>
+              <Col>
+                <h1 style={{ margin: "20px 0" }}></h1>
+              </Col>
+            </Row>
 
-        <Row>
-          <Col>
-          <span class="float-left">
-            <CSVLink
-              filename={"offering_package.csv"}
-              color="primary"
-              style={{ float: "left", marginRight: "10px" }}
-              className="btn btn-primary"
-              data={this.state.data}
-            >
-              Download CSV
-            </CSVLink>
-            </span>
-            <span class="float-left">
-            <ModalForm
-              buttonLabel="Add Item"
-              addItemToState={this.addItemToState}
-            />
-            </span>
-            <span class="float-right">
-          <Input
-              size="large"
-              name="searchInput"
-              value={this.state.searchInput || ""}
-              onChange={this.handleChange}
-              label="Search"
-              placeholder="Search"
-            />
-          </span>
-          </Col>
-        </Row>
+            <Row>
+              <Col>
+                <span class="float-left">
+                  <CSVLink
+                    filename={"offering_package.csv"}
+                    color="primary"
+                    style={{ float: "left", marginRight: "10px" }}
+                    className="btn btn-primary"
+                    data={this.state.data}
+                  >
+                    Download CSV
+                  </CSVLink>
+                </span>
+                <span class="float-left">
+                  <ModalForm
+                    buttonLabel="Add Item"
+                    addItemToState={this.addItemToState}
+                  />
+                </span>
+                <span class="float-right">
+                  <Input
+                    size="large"
+                    name="searchInput"
+                    value={this.state.searchInput || ""}
+                    onChange={this.handleChange}
+                    label="Search"
+                    placeholder="Search"
+                  />
+                </span>
+              </Col>
+            </Row>
 
-        <Row>
-          <Col>
+            <Row>
+              <Col>
+                <br />
+                <ReactTable
+                  data={
+                    this.state.filteredData && this.state.filteredData.length
+                      ? this.state.filteredData
+                      : this.state.data
+                  }
+                  columns={this.columns}
+                  defaultPageSize={10}
+                  className="-striped -highlight"
+                />
+              </Col>
+            </Row>
+          </Container>
           <br />
-            <ReactTable
-              data={
-                this.state.filteredData && this.state.filteredData.length
-                  ? this.state.filteredData
-                  : this.state.data
-              }
-              columns={this.columns}
-              defaultPageSize={10}
-              className="-striped -highlight"
-            />
-          </Col>
-        </Row>
-      </Container>
-      <br />
-      </CardBody>
+        </CardBody>
       </Card>
-    
     );
   }
 }

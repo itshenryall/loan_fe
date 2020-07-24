@@ -1,59 +1,68 @@
 import React from "react";
 import { Button, Form, FormGroup, Label, Input, e } from "reactstrap";
 
-import DatePicker from 'react-datepicker';
+import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
 
-
-class AddEditFormCustomer extends React.Component {ß
-  constructor (props) {
-    super(props)
+class AddEditFormCustomer extends React.Component {
+  constructor(props) {
+    super(props);
     this.state = {
-    customerID: "",
-    msisdn: "",
-    sourceChannel: "",
-    zoneArea: "",
-    balance: "",
-    arpu: "",
-    los: "",
-    creditScore: "",
-    maxSeq: "",
-    expired: new Date(),
-    
-  };
-  
-  this.handleChange = this.handleChange.bind(this);
-  this.onFormSubmit = this.onFormSubmit.bind(this);
-  
-  }
-  
-  handleChange(date) {  
-    this.setState({
-      expired: date 
-    })
-    let today = date
-    let datex = today.getDate() + "-"+ parseInt(today.getMonth() + 1).toString().padStart(2, "0") +"-"+today.getFullYear();
-    alert(datex)
-    }
-  
-  onFormSubmit(e) {
-  e.preventDefault();
-  console.log(this.state.expired)
-  }
-  
-  
-onChange = (e) => {
-  this.setState({ [e.target.name]: e.target.value });
-};
+      customerID: "",
+      msisdn: "",
+      sourceChannel: "",
+      zoneArea: "",
+      balance: "",
+      arpu: "",
+      los: "",
+      creditScore: "",
+      maxSeq: "",
+      expired: new Date(),
+      isFetch: true,
+    };
 
+    this.handleChange = this.handleChange.bind(this);
+    this.onFormSubmit = this.onFormSubmit.bind(this);
+  }
+
+  handleChange(date) {
+    this.setState({
+      expired: date,
+      isFetch: false,
+    });
+    let today = date;
+    let datex =
+      today.getDate() +
+      "-" +
+      parseInt(today.getMonth() + 1)
+        .toString()
+        .padStart(2, "0") +
+      "-" +
+      today.getFullYear();
+  }
+
+  onFormSubmit(e) {
+    e.preventDefault();
+  }
+
+  onChange = (e) => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
 
   submitFormAdd = (e) => {
     e.preventDefault();
     const user = JSON.parse(localStorage.getItem("user"));
-    
-    let today = new Date(this.state.expired)
-    let datex = today.getDate() + "-"+ parseInt(today.getMonth() + 1).toString().padStart(2, "0") +"-"+today.getFullYear();
+
+    let today = new Date(this.state.expired);
+    let datex =
+      today.getDate() +
+      "-" +
+      parseInt(today.getMonth() + 1)
+        .toString()
+        .padStart(2, "0") +
+      "-" +
+      today.getFullYear();
     fetch(
       "https://cors-anywhere.herokuapp.com/http://178.128.222.35:9100/loan-engine-web-services/api/customer",
       {
@@ -95,9 +104,16 @@ onChange = (e) => {
   submitFormEdit = (e) => {
     e.preventDefault();
     const user = JSON.parse(localStorage.getItem("user"));
-    
-    let today = new Date(this.state.expired)
-    let datex = today.getDate() + "-"+ parseInt(today.getMonth() + 1).toString().padStart(2, "0") +"-"+today.getFullYear();
+
+    let today = new Date(this.state.expired);
+    let datex =
+      today.getDate() +
+      "-" +
+      parseInt(today.getMonth() + 1)
+        .toString()
+        .padStart(2, "0") +
+      "-" +
+      today.getFullYear();
     fetch(
       "https://cors-anywhere.herokuapp.com/http://178.128.222.35:9100/loan-engine-web-services/api/customer",
       {
@@ -135,17 +151,41 @@ onChange = (e) => {
       .catch((err) => alert(err.message));
   };
 
- 
-  componentDidMount() { 
+  componentDidMount() {
     // if item exists, populate the state with proper data
     if (this.props.item) {
-
-      const { customerID, msisdn, sourceChannel, zoneArea, balance, arpu, los, datex, creditScore, maxSeq } = this.props.item;
-      this.setState({ customerID, msisdn, sourceChannel, zoneArea, balance, arpu, los, datex, creditScore, maxSeq });
+      const {
+        customerID,
+        msisdn,
+        sourceChannel,
+        zoneArea,
+        balance,
+        arpu,
+        los,
+        datex,
+        creditScore,
+        maxSeq,
+      } = this.props.item;
+      this.setState({
+        customerID,
+        msisdn,
+        sourceChannel,
+        zoneArea,
+        balance,
+        arpu,
+        los,
+        datex,
+        creditScore,
+        maxSeq,
+      });
     }
   }
-    
-    
+
+  toDate = (dateStr) => {
+    const [day, month, year] = dateStr.split("-");
+    return new Date(year, month - 1, day);
+  };
+
   render() {
     return (
       <Form
@@ -169,9 +209,7 @@ onChange = (e) => {
             id="msisdn"
             placeholder="ex: 08124882121"
             onChange={this.onChange}
-            value={
-              this.state.msisdn === null ? "" : this.state.msisdn
-            }
+            value={this.state.msisdn === null ? "" : this.state.msisdn}
           />
         </FormGroup>
         <FormGroup>
@@ -181,7 +219,9 @@ onChange = (e) => {
             name="sourceChannel"
             id="sourceChannel"
             onChange={this.onChange}
-            value={this.state.sourceChannel === null ? "" : this.state.sourceChannel}
+            value={
+              this.state.sourceChannel === null ? "" : this.state.sourceChannel
+            }
           />
         </FormGroup>
         <FormGroup>
@@ -225,13 +265,22 @@ onChange = (e) => {
           />
         </FormGroup>
         <FormGroup>
-          <Label for="datex">Expired</Label><br/> 
+          <Label for="datex">Expired</Label>
+          <br />
           <DatePicker
-          selected={ this.state.expired }
-          value={this.state.expired === null ? "" : this.state.expired}
-          onChange={ this.handleChange }
-          dateFormat="dd-MM-yyyy"
-          className="form-control"
+            selected={
+              this.props.item && this.state.isFetch
+                ? this.toDate(this.props.item.expired)
+                : this.state.expired
+            }
+            value={
+              this.props.item && this.state.isFetch === new Date()
+                ? new Date()
+                : new Date()
+            }
+            onChange={this.handleChange}
+            dateFormat="dd-MM-yyyy"
+            className="form-control"
           />
         </FormGroup>
         <FormGroup>
@@ -241,7 +290,9 @@ onChange = (e) => {
             name="creditScore"
             id="creditScore"
             onChange={this.onChange}
-            value={this.state.creditScore === null ? "" : this.state.creditScore}
+            value={
+              this.state.creditScore === null ? "" : this.state.creditScore
+            }
           />
         </FormGroup>
         <FormGroup>

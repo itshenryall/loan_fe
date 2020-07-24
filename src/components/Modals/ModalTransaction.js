@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Button, Modal, ModalHeader, ModalBody } from 'reactstrap'
 import AddEditForm from '../Forms/FormAddEditTransaction'
+import AddListForm from '../Forms/FormListOffering'
 
 class ModalTransaction extends Component {
   constructor(props) {
@@ -31,7 +32,7 @@ class ModalTransaction extends Component {
                   style={{float: "left", marginRight:"10px"}}>{label}
                 </Button>
         title = 'Edit Item'
-      } else {
+      }else{
         button = <Button
                   color="success"
                   onClick={this.toggle}
@@ -46,6 +47,7 @@ class ModalTransaction extends Component {
         {button}
         <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
           <ModalHeader toggle={this.toggle} close={closeBtn}>{title}</ModalHeader>
+          
           <ModalBody>
             <AddEditForm
               addItemToState={this.props.addItemToState}

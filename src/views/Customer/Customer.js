@@ -1,10 +1,20 @@
 import React, { Component } from "react";
 
-import { Container, Row, Col, Input, Button, Card, CardHeader, CardBody } from "reactstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Input,
+  Button,
+  Card,
+  CardHeader,
+  CardBody,
+} from "reactstrap";
 import ModalForm from "../../components/Modals/ModalCustomer";
 import { CSVLink } from "react-csv";
 import ReactTable from "react-table-v6";
 import "react-table-v6/react-table.css";
+import { Redirect } from "react-router-dom";
 
 /* 
 for documentation react-table purpose
@@ -24,6 +34,11 @@ class Customer extends Component {
 
   getdata() {
     const user = JSON.parse(localStorage.getItem("user"));
+
+    if (user === null) {
+      return <Redirect to="/login" />;
+    }
+
     fetch(
       "https://cors-anywhere.herokuapp.com/http://178.128.222.35:9100/loan-engine-web-services/api/customer",
       {
@@ -52,7 +67,9 @@ class Customer extends Component {
   };
 
   updateState = (data) => {
-    const itemIndex = this.state.data.findIndex((data) => data.customerID === data.customerID);
+    const itemIndex = this.state.data.findIndex(
+      (data) => data.customerID === data.customerID
+    );
     const newArray = [
       // destructure all data from beginning to the indexed item
       ...this.state.data.slice(0, itemIndex),
@@ -65,7 +82,9 @@ class Customer extends Component {
   };
 
   deleteItemFromState = (customerID) => {
-    const updateddata = this.state.data.filter((data) => data.customerID !== customerID);
+    const updateddata = this.state.data.filter(
+      (data) => data.customerID !== customerID
+    );
     this.setState({ data: updateddata });
   };
 
@@ -83,14 +102,38 @@ class Customer extends Component {
       return (
         value.customerID.toLowerCase().includes(searchInput.toLowerCase()) ||
         value.msisdn.toLowerCase().includes(searchInput.toLowerCase()) ||
-        value.sourceChannel.toString().toLowerCase().includes(searchInput.toLowerCase()) ||
-        value.zoneArea.toString().toLowerCase().includes(searchInput.toLowerCase()) ||
-        value.balance.toString().toLowerCase().includes(searchInput.toLowerCase()) ||
-        value.arpu.toString().toLowerCase().includes(searchInput.toLowerCase()) ||
-        value.los.toString().toLowerCase().includes(searchInput.toLowerCase()) ||
-        value.expired.toString().toLowerCase().includes(searchInput.toLowerCase()) ||
-        value.creditScore.toString().toLowerCase().includes(searchInput.toLowerCase()) ||
-        value.maxSeq.toString().toLowerCase().includes(searchInput.toLowerCase())
+        value.sourceChannel
+          .toString()
+          .toLowerCase()
+          .includes(searchInput.toLowerCase()) ||
+        value.zoneArea
+          .toString()
+          .toLowerCase()
+          .includes(searchInput.toLowerCase()) ||
+        value.balance
+          .toString()
+          .toLowerCase()
+          .includes(searchInput.toLowerCase()) ||
+        value.arpu
+          .toString()
+          .toLowerCase()
+          .includes(searchInput.toLowerCase()) ||
+        value.los
+          .toString()
+          .toLowerCase()
+          .includes(searchInput.toLowerCase()) ||
+        value.expired
+          .toString()
+          .toLowerCase()
+          .includes(searchInput.toLowerCase()) ||
+        value.creditScore
+          .toString()
+          .toLowerCase()
+          .includes(searchInput.toLowerCase()) ||
+        value.maxSeq
+          .toString()
+          .toLowerCase()
+          .includes(searchInput.toLowerCase())
       );
     });
     this.setState({ filteredData: filteredData });
@@ -170,7 +213,10 @@ class Customer extends Component {
             item={row}
             updateState={this.updateState}
           />
-          <Button color="danger" onClick={() => this.deleteItem(row.customerID)}>
+          <Button
+            color="danger"
+            onClick={() => this.deleteItem(row.customerID)}
+          >
             Delete
           </Button>
         </>
@@ -181,69 +227,66 @@ class Customer extends Component {
     let { data, columns, searchInput } = this.state;
     return (
       <Card>
-      <CardHeader>
-        Table Customer
-      </CardHeader>
-      <CardBody>
-      <Container className="App">
-        <Row>
-          <Col>
-            <h1 style={{ margin: "20px 0" }}></h1>
-          </Col>
-        </Row>
+        <CardHeader>Table Customer</CardHeader>
+        <CardBody>
+          <Container className="App">
+            <Row>
+              <Col>
+                <h1 style={{ margin: "20px 0" }}></h1>
+              </Col>
+            </Row>
 
-        <Row>
-          <Col>
-          <span class="float-left">
-            <CSVLink
-              filename={"Customer.csv"}
-              color="primary"
-              style={{ float: "left", marginRight: "10px" }}
-              className="btn btn-primary"
-              data={this.state.data}
-            >
-              Download CSV
-            </CSVLink>
-            </span>
-            <span class="float-left">
-            <ModalForm
-              buttonLabel="Add Item"
-              addItemToState={this.addItemToState}
-            />
-            </span>
-            <span class="float-right">
-          <Input
-              size="large"
-              name="searchInput"
-              value={this.state.searchInput || ""}
-              onChange={this.handleChange}
-              label="Search"
-              placeholder="Search"
-            />
-          </span>
-          </Col>
-        </Row>
+            <Row>
+              <Col>
+                <span class="float-left">
+                  <CSVLink
+                    filename={"Customer.csv"}
+                    color="primary"
+                    style={{ float: "left", marginRight: "10px" }}
+                    className="btn btn-primary"
+                    data={this.state.data}
+                  >
+                    Download CSV
+                  </CSVLink>
+                </span>
+                <span class="float-left">
+                  <ModalForm
+                    buttonLabel="Add Item"
+                    addItemToState={this.addItemToState}
+                  />
+                </span>
+                <span class="float-right">
+                  <Input
+                    size="large"
+                    name="searchInput"
+                    value={this.state.searchInput || ""}
+                    onChange={this.handleChange}
+                    label="Search"
+                    placeholder="Search"
+                  />
+                </span>
+              </Col>
+            </Row>
 
-        <Row>
-          <Col>
+            <Row>
+              <Col>
+                <br />
+                <ReactTable
+                  data={
+                    this.state.filteredData && this.state.filteredData.length
+                      ? this.state.filteredData
+                      : this.state.data
+                  }
+                  columns={this.columns}
+                  defaultPageSize={10}
+                  className="-striped -highlight"
+                />
+              </Col>
+            </Row>
+          </Container>
           <br />
-            <ReactTable
-              data={
-                this.state.filteredData && this.state.filteredData.length
-                  ? this.state.filteredData
-                  : this.state.data
-              }
-              columns={this.columns}
-              defaultPageSize={10}
-              className="-striped -highlight"
-            />
-          </Col>
-        </Row>
-      </Container>
-      <br />
-      </CardBody>
+        </CardBody>
       </Card>
-    
     );
   }
 }
